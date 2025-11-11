@@ -31,10 +31,10 @@
     Load the core logic and the injector as ES modules.
     Adjust the paths ('../../') to match your file structure.
   -->
-  <script type="module" src="core/index.js"></script>
-  <script type="module"src="core/injector.js"></script>
+  <script type="module" src="core/index.js" defer></script>
+  <script type="module" src="core/injector.js" defer></script>
 
-  <script>
+  <script defer>
     // This script is separate from the injector, just for this demo page.
     // It demonstrates how the tracker works with SPA navigation.
     document.addEventListener('DOMContentLoaded', () => {
