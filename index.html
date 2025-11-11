@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS Tracker Example</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    nav { margin-bottom: 20px; }
+    button { margin: 5px; padding: 10px; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+
+  <h1>Vanilla JS Tracker Example</h1>
+  <p>Open your browser's console to see the analytics events being queued and "sent" in batches.</p>
+
+  <nav>
+    <!-- These buttons use the History API to simulate a Single Page App (SPA) -->
+    <button id="home">Go Home (pushState)</button>
+    <button id="about">Go About (pushState)</button>
+    <button id="contact">Go Contact (replaceState)</button>
+  </nav>
+
+  <p>Current simulated page: <span id="current-page">/</span></p>
+
+  <button id="custom-event">Track Custom Event</button>
+
+  <!-- 
+    Load the core logic and the injector as ES modules.
+    Adjust the paths ('../../') to match your file structure.
+  -->
+  <script type_to_remove="module" src="core/index.js"></script>
+  <script type_to_remove="module"src="core/injector.js"></script>
+
+  <script>
+    // This script is separate from the injector, just for this demo page.
+    // It demonstrates how the tracker works with SPA navigation.
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageSpan = document.getElementById('current-page');
+
+      document.getElementById('home').addEventListener('click', () => {
+        // Use history.pushState to change the URL without a full reload
+        // Our tracker's patched function will detect this.
+        history.pushState({ page: 'home' }, 'Home', '/');
+        pageSpan.textContent = '/';
+      });
+
+      document.getElementById('about').addEventListener('click', () => {
+        history.pushState({ page: 'about' }, 'About', '/about');
+        pageSpan.textContent = '/about';
+      });
+      
+      document.getElementById('contact').addEventListener('click', () => {
+        // replaceState is also tracked
+        history.replaceState({ page: 'contact' }, 'Contact', '/contact');
+        pageSpan.textContent = '/contact';
+      });
+
+      document.getElementById('custom-event').addEventListener('click', () => {
+        // Access the tracker from the window object
+        if (window.MyAnalytics) {
+          window.MyAnalytics.trackEvent('custom_button_click', { buttonId: 'custom-event' });
+        } else {
+          console.error("Tracker not ready.");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
