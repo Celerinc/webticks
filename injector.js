@@ -6,7 +6,7 @@
  */
 import { AnalyticsTracker } from "index";
 
-function inject() {
+export default function inject() {
   // 1. Check if tracker is already running
   if (window.MyAnalytics) {
     console.warn("MyAnalytics tracker already initialized.");
