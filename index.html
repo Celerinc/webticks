@@ -42,23 +42,15 @@
 
     <button id="custom-event">Track Custom Event</button>
 
-    <!-- 
-    Load the core logic and the injector as ES modules.
-    Adjust the paths ('../../') to match your file structure.
-  -->
-    <script type="module" src="index.js" defer></script>
-    <script type="module" src="injector.js" defer></script>
+    <script type="module" src="/packages/core/tracker.js" defer></script>
+    <script type="module" src="/packages/core/injector.js" defer></script>
 
     <script defer type="module">
-        // This script is separate from the injector, just for this demo page.
-        // It demonstrates how the tracker works with SPA navigation.
 
         document.addEventListener('DOMContentLoaded', () => {
             const pageSpan = document.getElementById('current-page');
 
             document.getElementById('home').addEventListener('click', () => {
-                // Use history.pushState to change the URL without a full reload
-                // Our tracker's patched function will detect this.
                 history.pushState({ page: 'home' }, 'Home', '/');
                 pageSpan.textContent = '/';
             });
@@ -69,13 +61,11 @@
             });
 
             document.getElementById('contact').addEventListener('click', () => {
-                // replaceState is also tracked
                 history.replaceState({ page: 'contact' }, 'Contact', '/contact');
                 pageSpan.textContent = '/contact';
             });
 
             document.getElementById('custom-event').addEventListener('click', () => {
-                // Access the tracker from the window object
                 if (window.MyAnalytics) {
                     window.MyAnalytics.trackEvent('custom_button_click', { buttonId: 'custom-event' });
                 } else {
