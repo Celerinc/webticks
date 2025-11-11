@@ -4,9 +4,9 @@
  * It imports the core tracker, instantiates it, and *injects* it
  * into the window object, as you requested.
  */
-import { AnalyticsTracker } from 'index'; // Adjust this path as needed
+import { AnalyticsTracker } from ".";
 
-(function() {
+function inject() {
   // 1. Check if tracker is already running
   if (window.MyAnalytics) {
     console.warn("MyAnalytics tracker already initialized.");
@@ -29,4 +29,6 @@ import { AnalyticsTracker } from 'index'; // Adjust this path as needed
   console.log("MyAnalytics tracker injected and initialized (Vanilla).");
   console.log("You can now use 'window.MyAnalytics.trackEvent(\"my_event\")' anywhere.");
 
-})();
+};
+
+inject()
