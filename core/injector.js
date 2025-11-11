@@ -30,5 +30,3 @@ function inject() {
   console.log("You can now use 'window.MyAnalytics.trackEvent(\"my_event\")' anywhere.");
 
 };
-
-inject()
