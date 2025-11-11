@@ -5,14 +5,24 @@ export class AnalyticsTracker {
     this.lastPath = "";
     this.batchSendInterval = 10000;
     this.sendTimer = null;
+    this.userId = null;
 
     // Bind methods
     this.checkPageChange = this.checkPageChange.bind(this);
     this.sendQueue = this.sendQueue.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
     this.handlePageHide = this.handlePageHide.bind(this);
+    this.initializeUser = this.initializeUser.bind(this);
+
+    this.initializeUser();
 
     console.log("AnalyticsTracker class constructed.");
+  }
+
+  initializeUser() {
+    if (!this.userId) {
+      this.userId = crypto.randomUUID();
+    }
   }
 
   /**
@@ -23,78 +33,54 @@ export class AnalyticsTracker {
    * otherwise it falls back to patching the History API.
    */
   autoTrackPageViews() {
-    console.log("Starting auto-tracking...");
     if (typeof window === 'undefined') {
       console.warn("Auto-tracking disabled: Not in a browser environment.");
       return;
     }
 
-    // --- Progressive Enhancement for Navigation ---
+    console.log("Using legacy history patching (fallback).");
 
-    if (window.navigation) {
-      // 1. MODERN APPROACH (Chrome, Edge, Opera)
-      // Use the new Navigation API.
-      // 'navigatesuccess' fires *after* the navigation, just when we need it.
-      console.log("Using modern Navigation API.");
-      window.navigation.addEventListener('navigatesuccess', this.checkPageChange);
+    this.originalPushState = window.history.pushState;
+    this.originalReplaceState = window.history.replaceState;
 
-    } else {
-      // 2. LEGACY FALLBACK (Firefox, Safari)
-      // Use the "monkey-patching" method.
-      console.log("Using legacy history patching (fallback).");
+    window.history.pushState = (...args) => {
+      // Call the original function first so the URL changes
+      const result = this.originalPushState.apply(window.history, args);
 
-      // Store the original history functions
-      this.originalPushState = window.history.pushState;
-      this.originalReplaceState = window.history.replaceState;
+      this.checkPageChange();
 
-      // 1. Patch pushState (for app navigation) - Revamped with your logic
-      window.history.pushState = (...args) => {
-        // Call the original function first so the URL changes
-        const result = this.originalPushState.apply(window.history, args);
+      // NEW: Call the custom hook if it exists (as you suggested)
+      if (typeof window.history.onpushstate === "function") {
+        window.history.onpushstate({ state: args[0] });
+      }
 
-        this.checkPageChange();
+      return result;
+    };
 
-        // NEW: Call the custom hook if it exists (as you suggested)
-        if (typeof window.history.onpushstate === "function") {
-          window.history.onpushstate({ state: args[0] });
-        }
-        
-        return result;
-      };
+    window.history.replaceState = (...args) => {
+      // Call the original function first so the URL changes
+      const result = this.originalReplaceState.apply(window.history, args);
 
-      // 2. Patch replaceState (for app navigation) - Revamped with your logic
-      window.history.replaceState = (...args) => {
-        // Call the original function first so the URL changes
-        const result = this.originalReplaceState.apply(window.history, args);
+      // Call our internal tracker
+      this.checkPageChange();
 
-        // Call our internal tracker
-        this.checkPageChange();
+      if (typeof window.history.onreplacestate === "function") {
+        window.history.onreplacestate({ state: args[0] });
+      }
 
-        if (typeof window.history.onreplacestate === "function") {
-          window.history.onreplacestate({ state: args[0] });
-        }
-        
-        return result;
-      };
+      return result;
+    };
 
-      // 3. Listen for popstate (for back/forward button clicks)
-      window.addEventListener('popstate', this.checkPageChange);
-    }
+    window.addEventListener('popstate', this.checkPageChange);
 
-    // --- Add other automated event listeners (run for both) ---
 
-    // 4. Listen for visibility changes (tabbing away)
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
 
-    // 5. Listen for page hide (closing tab/browser) to send queue
     window.addEventListener('pagehide', this.handlePageHide);
 
-
-    // Track the initial page load
     this.lastPath = window.location.href;
     this.trackPageView(this.lastPath);
 
-    // Start the batch sending interval
     this.sendTimer = setInterval(this.sendQueue, this.batchSendInterval);
   }
 
@@ -107,7 +93,7 @@ export class AnalyticsTracker {
     if (currentPath !== this.lastPath) {
       console.log(`Page change detected: ${this.lastPath} -> ${currentPath}`);
       this.lastPath = currentPath;
-    this.trackPageView(currentPath);
+      this.trackPageView(currentPath);
     }
   }
 
@@ -127,9 +113,6 @@ export class AnalyticsTracker {
    * This is a last chance to send any pending events.
    */
   handlePageHide() {
-    // Note: 'pagehide' often doesn't allow async network requests.
-    // In a real app, you'd use navigator.sendBeacon() here.
-    // For this demo, we'll just log that it *would* send.
     console.log("Page hidden, attempting final batch send.");
     this.sendQueue();
   }
@@ -144,8 +127,7 @@ export class AnalyticsTracker {
       path: path,
       timestamp: new Date().toISOString()
     };
-    
-    console.log("Queueing event:", event);
+
     this.eventQueue.push(event);
   }
 
@@ -162,40 +144,37 @@ export class AnalyticsTracker {
       path: window.location.href,
       timestamp: new Date().toISOString()
     };
-    
-    console.log("Queueing event:", event);
+
     this.eventQueue.push(event);
   }
-
 
   /**
    * Sends all queued events to the backend in a single batch.
    */
   sendQueue() {
     if (this.eventQueue.length === 0) {
-      return; // No events to send
+      return;
     }
 
     const eventsToSend = [...this.eventQueue];
-    this.eventQueue = []; // Clear the queue immediately
 
-    // Printing all queued events to the console (as requested)
-    console.group(`Analytics Batch Send (every ${this.batchSendInterval / 1000}s)`);
-    console.log(`Printing ${eventsToSend.length} events from the queue:`);
-    console.table(eventsToSend);
-    console.log(`(Simulating send to ${this.config.backendUrl})`);
-    console.groupEnd();
+    // console.group(`Analytics Batch Send (every ${this.batchSendInterval / 1000}s)`);
+    // console.log(`Printing ${eventsToSend.length} events from the queue:`);
+    // console.table(eventsToSend);
+    // console.log(`(Simulating send to ${this.config.backendUrl})`);
+    // console.groupEnd();
 
-    // --- Backend Call Stub ---
-    // In a real app, you would use fetch() here.
-    /*
     fetch(this.config.backendUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(eventsToSend)
+      body: JSON.stringify({
+        uid: this.userId,
+        events: eventsToSend,
+        datetime: new Date().toISOString()
+      })
     })
-    // ... (fetch logic) ...
-    */
+
+    this.eventQueue = [];
   }
 
   /**
@@ -203,7 +182,7 @@ export class AnalyticsTracker {
    */
   destroy() {
     console.log("Destroying tracker...");
-    
+
     // Stop the batch sender
     if (this.sendTimer) {
       clearInterval(this.sendTimer);
@@ -228,4 +207,6 @@ export class AnalyticsTracker {
     document.removeEventListener('visibilitychange', this.handleVisibilityChange);
     window.removeEventListener('pagehide', this.handlePageHide);
   }
+
+
 }

@@ -66,8 +66,8 @@
             });
 
             document.getElementById('custom-event').addEventListener('click', () => {
-                if (window.MyAnalytics) {
-                    window.MyAnalytics.trackEvent('custom_button_click', { buttonId: 'custom-event' });
+                if (window.webticks) {
+                    window.webticks.trackEvent('custom_button_click', { buttonId: 'custom-event' });
                 } else {
                     console.error("Tracker not ready.");
                 }
