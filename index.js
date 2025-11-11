@@ -1,9 +1,9 @@
 export class AnalyticsTracker {
   constructor(config) {
-    this.config = config || { backendUrl: "/api/track" }; // Default config
+    this.config = config || { backendUrl: "/api/track" };
     this.eventQueue = [];
     this.lastPath = "";
-    this.batchSendInterval = 10000; // Send batch every 3 seconds (as requested)
+    this.batchSendInterval = 10000;
     this.sendTimer = null;
 
     // Bind methods
