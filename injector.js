@@ -4,7 +4,7 @@
  * It imports the core tracker, instantiates it, and *injects* it
  * into the window object, as you requested.
  */
-import { AnalyticsTracker } from "index";
+import { AnalyticsTracker } from "./index.js";
 
 export default function inject() {
   // 1. Check if tracker is already running
