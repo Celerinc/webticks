@@ -40,12 +40,14 @@ export class AnalyticsTracker {
     window.history.pushState = (...args) => {
       this.originalPushState.apply(window.history, args);
       this.checkPageChange();
+      console.error('URL changed via pushState:', location.href);Ï
     };
 
     // Patch replaceState
     window.history.replaceState = (...args) => {
       this.originalReplaceState.apply(window.history, args);
       this.checkPageChange();
+      console.error('URL changed via replaceState:', location.href);
     };
 
     // Listen for back/forward button clicks
