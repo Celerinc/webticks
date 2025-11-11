@@ -3,7 +3,7 @@ export class AnalyticsTracker {
     this.config = config || { backendUrl: "/api/track" }; // Default config
     this.eventQueue = [];
     this.lastPath = "";
-    this.batchSendInterval = 3000; // Send batch every 3 seconds (as requested)
+    this.batchSendInterval = 10000; // Send batch every 3 seconds (as requested)
     this.sendTimer = null;
 
     // Bind methods
@@ -52,9 +52,7 @@ export class AnalyticsTracker {
         // Call the original function first so the URL changes
         const result = this.originalPushState.apply(window.history, args);
 
-        // Call our internal tracker
         this.checkPageChange();
-        console.log('URL changed via pushState:', location.href);
 
         // NEW: Call the custom hook if it exists (as you suggested)
         if (typeof window.history.onpushstate === "function") {
@@ -71,9 +69,7 @@ export class AnalyticsTracker {
 
         // Call our internal tracker
         this.checkPageChange();
-        console.log('URL changed via replaceState:', location.href);
 
-        // NEW: Call the custom hook if it exists
         if (typeof window.history.onreplacestate === "function") {
           window.history.onreplacestate({ state: args[0] });
         }
