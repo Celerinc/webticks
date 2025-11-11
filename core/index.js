@@ -1,9 +1,3 @@
-/**
- * MyAnalytics Tracker
- * (Updated with Navigation API and extensible history patching)
- * * This is the core, framework-agnostic analytics logic.
- * It's exported as a class to be instantiated by a framework-specific "injector".
- */
 export class AnalyticsTracker {
   constructor(config) {
     this.config = config || { backendUrl: "/api/track" }; // Default config
