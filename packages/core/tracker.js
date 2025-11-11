@@ -172,7 +172,10 @@ export class AnalyticsTracker {
         events: eventsToSend,
         datetime: new Date().toISOString()
       })
-    })
+    }).catch(err => {
+      console.error("Failed to send analytics batch:", err);
+      this.eventQueue = [...eventsToSend]
+    });
 
     this.eventQueue = [];
   }
