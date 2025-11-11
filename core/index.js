@@ -60,7 +60,7 @@ export class AnalyticsTracker {
 
         // Call our internal tracker
         this.checkPageChange();
-        console.error('URL changed via pushState:', location.href);
+        console.log('URL changed via pushState:', location.href);
 
         // NEW: Call the custom hook if it exists (as you suggested)
         if (typeof window.history.onpushstate === "function") {
@@ -77,7 +77,7 @@ export class AnalyticsTracker {
 
         // Call our internal tracker
         this.checkPageChange();
-        console.error('URL changed via replaceState:', location.href);
+        console.log('URL changed via replaceState:', location.href);
 
         // NEW: Call the custom hook if it exists
         if (typeof window.history.onreplacestate === "function") {
