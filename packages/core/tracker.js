@@ -25,13 +25,6 @@ export class AnalyticsTracker {
     }
   }
 
-  /**
-   * Starts the automatic page view tracking.
-   * This is the "automated" part you requested.
-   *
-   * It now uses the modern Navigation API if available,
-   * otherwise it falls back to patching the History API.
-   */
   autoTrackPageViews() {
     if (typeof window === 'undefined') {
       console.warn("Auto-tracking disabled: Not in a browser environment.");
@@ -84,10 +77,6 @@ export class AnalyticsTracker {
     this.sendTimer = setInterval(this.sendQueue, this.batchSendInterval);
   }
 
-  /**
-   * Checks if the window.location.href has changed.
-   * If it has, it tracks a new page view.
-   */
   checkPageChange() {
     const currentPath = window.location.href;
     if (currentPath !== this.lastPath) {
@@ -97,9 +86,6 @@ export class AnalyticsTracker {
     }
   }
 
-  /**
-   * Handles visibility change events (e.g., user tabs away).
-   */
   handleVisibilityChange() {
     if (document.hidden) {
       this.trackEvent('visibility_change', { visible: false });
@@ -108,19 +94,11 @@ export class AnalyticsTracker {
     }
   }
 
-  /**
-   * Handles page hide events (e.g., user closes tab).
-   * This is a last chance to send any pending events.
-   */
   handlePageHide() {
     console.log("Page hidden, attempting final batch send.");
     this.sendQueue();
   }
 
-  /**
-   * Adds a page view event to the queue.
-   * @param {string} path - The URL path to track.
-   */
   trackPageView(path) {
     const event = {
       type: 'pageview',
@@ -131,11 +109,6 @@ export class AnalyticsTracker {
     this.eventQueue.push(event);
   }
 
-  /**
-   * Adds a custom event to the queue.
-   * @param {string} eventName - The name of the event (e.g., 'button_click').
-   * @param {object} details - Any additional data.
-   */
   trackEvent(eventName, details = {}) {
     const event = {
       type: 'custom',
@@ -148,9 +121,6 @@ export class AnalyticsTracker {
     this.eventQueue.push(event);
   }
 
-  /**
-   * Sends all queued events to the backend in a single batch.
-   */
   sendQueue() {
     if (this.eventQueue.length === 0) {
       return;
