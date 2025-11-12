@@ -1,0 +1,7 @@
+{
+  "name": "@webticks/core",
+  "version": "1.0.0",
+  "main": "injector.js",
+  "module": "injector.js",
+  "license": "ISC"
+}

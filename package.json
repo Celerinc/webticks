@@ -9,11 +9,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.9.0",
   "private": true,
   "workspaces": [
     "packages/core",
     "packages/react",
-    "packages/next"
+    "packages/nextjs"
   ]
 }
