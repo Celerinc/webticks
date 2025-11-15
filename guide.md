@@ -35,6 +35,7 @@ pnpm version patch
 pnpm version minor
 ```
 4. Publish All Packages
+
 This single command will find every package in your workspaces and publish them to npm.
 ```bash
 pnpm publish -r --access public
