@@ -1,12 +1,12 @@
 /**
- * Demo Server - Tests both browser and server-side tracking
+ * Demo Server - Node.js server-side tracking example
  * Run with: node demo-server.js
  */
 
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createServerTracker } from '../server-middleware.js';
+import { createServerTracker } from '@webticks/node';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

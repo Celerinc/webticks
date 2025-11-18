@@ -7,7 +7,6 @@
   "exports": {
     ".": "./injector.js",
     "./tracker": "./tracker.js",
-    "./server": "./server-middleware.js",
     "./platform-adapters": "./platform-adapters.js"
   },
   "files": [

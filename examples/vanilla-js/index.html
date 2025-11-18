@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTicks Vanilla JS Example</title>
+</head>
+
+<body>
+    <h1>WebTicks Vanilla JS Example</h1>
+    <p>Check the console to see tracking in action!</p>
+
+    <button onclick="goToAbout()">Go to About</button>
+    <button onclick="customEvent()">Track Custom Event</button>
+
+    <script type="module">
+        // Import the tracker
+        import { AnalyticsTracker } from '@webticks/core/tracker';
+
+        // Create and start tracker
+        const tracker = new AnalyticsTracker({
+            backendUrl: '/api/track'
+        });
+
+        tracker.autoTrackPageViews();
+        console.log('✅ WebTicks initialized');
+
+        // Make tracker globally available for demo buttons
+        window.tracker = tracker;
+        window.goToAbout = () => {
+            history.pushState({}, '', '/about');
+        };
+        window.customEvent = () => {
+            tracker.trackEvent('button_click', { button: 'custom' });
+            console.log('Custom event tracked!');
+        };
+    </script>
+</body>
+
+</html>
