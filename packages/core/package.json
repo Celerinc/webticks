@@ -1,7 +1,14 @@
 {
   "name": "@webticks/core",
   "version": "1.0.0",
+  "type": "module",
   "main": "injector.js",
   "module": "injector.js",
+  "exports": {
+    ".": "./injector.js",
+    "./tracker": "./tracker.js",
+    "./server": "./server-middleware.js",
+    "./platform-adapters": "./platform-adapters.js"
+  },
   "license": "ISC"
 }

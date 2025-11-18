@@ -1,3 +1,5 @@
+import { getPlatformAdapter, isServer, isBrowser } from './platform-adapters.js';
+
 export class AnalyticsTracker {
   constructor(config) {
     this.config = config || { backendUrl: "/api/track" };
@@ -6,79 +8,51 @@ export class AnalyticsTracker {
     this.batchSendInterval = 10000;
     this.sendTimer = null;
     this.userId = null;
+    this.adapter = getPlatformAdapter();
 
     // Bind methods
     this.checkPageChange = this.checkPageChange.bind(this);
     this.sendQueue = this.sendQueue.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
     this.handlePageHide = this.handlePageHide.bind(this);
-    this.initializeUser = this.initializeUser.bind(this);
 
     this.initializeUser();
 
-    console.log("AnalyticsTracker class constructed.");
+    console.log(`AnalyticsTracker initialized in ${isServer() ? 'Node.js' : 'Browser'} environment.`);
   }
 
   initializeUser() {
     if (!this.userId) {
-      this.userId = crypto.randomUUID();
+      this.userId = this.adapter.getUserId();
     }
   }
 
+  /**
+   * Automatically track page views (browser-only)
+   * For server-side, use the middleware instead
+   */
   autoTrackPageViews() {
-    if (typeof window === 'undefined') {
-      console.warn("Auto-tracking disabled: Not in a browser environment.");
+    if (isServer()) {
+      console.warn("Auto-tracking disabled: Not in a browser environment. Use server middleware instead.");
       return;
     }
 
-    console.log("Using legacy history patching (fallback).");
+    console.log("Setting up automatic page view tracking...");
 
-    this.originalPushState = window.history.pushState;
-    this.originalReplaceState = window.history.replaceState;
+    // Use adapter to setup platform-specific tracking
+    this.adapter.setupAutoTracking(this);
 
-    window.history.pushState = (...args) => {
-      // Call the original function first so the URL changes
-      const result = this.originalPushState.apply(window.history, args);
-
-      this.checkPageChange();
-
-      // NEW: Call the custom hook if it exists (as you suggested)
-      if (typeof window.history.onpushstate === "function") {
-        window.history.onpushstate({ state: args[0] });
-      }
-
-      return result;
-    };
-
-    window.history.replaceState = (...args) => {
-      // Call the original function first so the URL changes
-      const result = this.originalReplaceState.apply(window.history, args);
-
-      // Call our internal tracker
-      this.checkPageChange();
-
-      if (typeof window.history.onreplacestate === "function") {
-        window.history.onreplacestate({ state: args[0] });
-      }
-
-      return result;
-    };
-
-    window.addEventListener('popstate', this.checkPageChange);
-
-
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
-
-    window.addEventListener('pagehide', this.handlePageHide);
-
-    this.lastPath = window.location.href;
-    this.trackPageView(this.lastPath);
-
+    // Start the batch send timer
     this.sendTimer = setInterval(this.sendQueue, this.batchSendInterval);
   }
 
+  /**
+   * Check for page changes (browser-only)
+   */
   checkPageChange() {
-    const currentPath = window.location.href;
+    if (isServer()) return;
+
+    const currentPath = this.adapter.getCurrentPath();
     if (currentPath !== this.lastPath) {
       console.log(`Page change detected: ${this.lastPath} -> ${currentPath}`);
       this.lastPath = currentPath;
@@ -86,7 +60,12 @@ export class AnalyticsTracker {
     }
   }
 
+  /**
+   * Handle visibility changes (browser-only)
+   */
   handleVisibilityChange() {
+    if (isServer()) return;
+
     if (document.hidden) {
       this.trackEvent('visibility_change', { visible: false });
     } else {
@@ -94,11 +73,18 @@ export class AnalyticsTracker {
     }
   }
 
+  /**
+   * Handle page hide event (browser-only)
+   */
   handlePageHide() {
     console.log("Page hidden, attempting final batch send.");
     this.sendQueue();
   }
 
+  /**
+   * Track a page view
+   * @param {string} path - The path/URL to track
+   */
   trackPageView(path) {
     const event = {
       type: 'pageview',
@@ -109,50 +95,74 @@ export class AnalyticsTracker {
     this.eventQueue.push(event);
   }
 
+  /**
+   * Track a custom event
+   * @param {string} eventName - Name of the event
+   * @param {Object} details - Event details/metadata
+   */
   trackEvent(eventName, details = {}) {
     const event = {
       type: 'custom',
       name: eventName,
       details: details,
-      path: window.location.href,
+      path: isBrowser() ? window.location.href : null,
       timestamp: new Date().toISOString()
     };
 
     this.eventQueue.push(event);
   }
 
-  sendQueue() {
+  /**
+   * Track a server-side HTTP request (server-only)
+   * @param {Object} requestData - Request information (method, path, headers, etc.)
+   */
+  trackServerRequest(requestData) {
+    const event = {
+      type: 'server_request',
+      method: requestData.method,
+      path: requestData.path,
+      query: requestData.query,
+      headers: requestData.headers,
+      timestamp: new Date().toISOString()
+    };
+
+    this.eventQueue.push(event);
+  }
+
+  /**
+   * Send queued events to the backend
+   */
+  async sendQueue() {
     if (this.eventQueue.length === 0) {
       return;
     }
 
     const eventsToSend = [...this.eventQueue];
 
-    // console.group(`Analytics Batch Send (every ${this.batchSendInterval / 1000}s)`);
-    // console.log(`Printing ${eventsToSend.length} events from the queue:`);
-    // console.table(eventsToSend);
-    // console.log(`(Simulating send to ${this.config.backendUrl})`);
-    // console.groupEnd();
-
-    fetch(this.config.backendUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const response = await this.adapter.sendRequest(this.config.backendUrl, {
         uid: this.userId,
         events: eventsToSend,
         datetime: new Date().toISOString()
-      })
-    }).then(d => {
-      this.eventQueue = [];
-    }).catch(err => {
-      console.error("Failed to send analytics batch:", err);
-      this.eventQueue = [...eventsToSend]
-    });
+      });
 
+      if (response.ok) {
+        // Clear queue on success
+        this.eventQueue = [];
+      } else {
+        console.error(`Failed to send analytics batch: ${response.status}`);
+        // Keep events in queue to retry
+        this.eventQueue = [...eventsToSend];
+      }
+    } catch (err) {
+      console.error("Failed to send analytics batch:", err);
+      // Keep events in queue to retry
+      this.eventQueue = [...eventsToSend];
+    }
   }
 
   /**
-   * Cleans up listeners and timers.
+   * Cleans up listeners and timers
    */
   destroy() {
     console.log("Destroying tracker...");
@@ -162,25 +172,7 @@ export class AnalyticsTracker {
       clearInterval(this.sendTimer);
     }
 
-    // --- Conditional cleanup based on which method was used ---
-    if (window.navigation) {
-      // 1. Cleanup modern listener
-      window.navigation.removeEventListener('navigatesuccess', this.checkPageChange);
-    } else {
-      // 2. Cleanup legacy listeners and restore functions
-      if (this.originalPushState) {
-        window.history.pushState = this.originalPushState;
-      }
-      if (this.originalReplaceState) {
-        window.history.replaceState = this.originalReplaceState;
-      }
-      window.removeEventListener('popstate', this.checkPageChange);
-    }
-
-    // Remove other listeners
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
-    window.removeEventListener('pagehide', this.handlePageHide);
+    // Use adapter to cleanup platform-specific tracking
+    this.adapter.cleanupAutoTracking(this);
   }
-
-
 }

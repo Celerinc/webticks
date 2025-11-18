@@ -1,6 +1,12 @@
 import { AnalyticsTracker } from "./tracker.js";
 
 export default function inject() {
+  // Only auto-inject in browser environments
+  if (typeof window === 'undefined') {
+    console.warn("webticks auto-inject skipped: Not in a browser environment.");
+    return;
+  }
+
   if (window.webticks) {
     console.warn("webticks tracker already initialized.");
     return;
@@ -15,4 +21,7 @@ export default function inject() {
   window.webticks = tracker;
 };
 
-inject()
+// Only auto-execute in browser
+if (typeof window !== 'undefined') {
+  inject();
+}
