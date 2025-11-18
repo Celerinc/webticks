@@ -1,0 +1,13 @@
+{
+    "name": "webticks-demo",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "WebTicks Browser Demo",
+    "main": "demo-server.js",
+    "scripts": {
+        "start": "node demo-server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

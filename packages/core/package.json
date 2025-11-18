@@ -10,5 +10,12 @@
     "./server": "./server-middleware.js",
     "./platform-adapters": "./platform-adapters.js"
   },
+  "files": [
+    "tracker.js",
+    "injector.js",
+    "server-middleware.js",
+    "platform-adapters.js",
+    "README.md"
+  ],
   "license": "ISC"
 }

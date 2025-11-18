@@ -28,16 +28,15 @@ export class AnalyticsTracker {
   }
 
   /**
-   * Automatically track page views (browser-only)
-   * For server-side, use the middleware instead
+   * Automatically track page views (browser) or HTTP requests (server)
+   * Works in both environments!
    */
   autoTrackPageViews() {
     if (isServer()) {
-      console.warn("Auto-tracking disabled: Not in a browser environment. Use server middleware instead.");
-      return;
+      console.log("Setting up automatic server-side tracking...");
+    } else {
+      console.log("Setting up automatic page view tracking...");
     }
-
-    console.log("Setting up automatic page view tracking...");
 
     // Use adapter to setup platform-specific tracking
     this.adapter.setupAutoTracking(this);

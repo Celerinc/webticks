@@ -43,11 +43,6 @@ export class BrowserAdapter {
         return window.location.href;
     }
 
-    // Check if environment is available
-    isAvailable() {
-        return true; // Already checked via window
-    }
-
     // Setup auto-tracking (browser-specific)
     setupAutoTracking(tracker) {
         // Patch history API
@@ -180,21 +175,20 @@ export class NodeAdapter {
         return null; // Server doesn't have a "current path"
     }
 
-    // Check if environment is available
-    isAvailable() {
-        return isServer();
-    }
-
-    // Setup auto-tracking (server-side is manual via middleware)
+    // Setup auto-tracking (server-side)
+    // Note: Due to ES module restrictions, we can't automatically patch HTTP modules
+    // Users should call tracker.trackServerRequest() in their request handler
     setupAutoTracking(tracker) {
-        console.log('Auto-tracking in Node.js requires middleware. See server-middleware.js');
-        // No automatic setup in server environment
-        // Users should use the middleware instead
+        console.log('Server-side auto-tracking: Call tracker.trackServerRequest() in your request handler');
+        console.log('Example: app.use((req, res, next) => { tracker.trackServerRequest({method: req.method, path: req.url}); next(); })');
+
+        // Start batch sending
+        // (Already started in autoTrackPageViews, but keeping for consistency)
     }
 
     // Cleanup auto-tracking
     cleanupAutoTracking(tracker) {
-        // No cleanup needed for server
+        // Nothing to clean up on server
     }
 }
 
