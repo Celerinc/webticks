@@ -12,7 +12,6 @@
   "files": [
     "tracker.js",
     "injector.js",
-    "server-middleware.js",
     "platform-adapters.js",
     "README.md"
   ],
