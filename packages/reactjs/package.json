@@ -1,6 +1,9 @@
 {
   "name": "@webticks/reactjs",
   "version": "1.0.0",
+  "main": "index.jsx",
+  "module": "index.jsx",
+  "type": "module",
   "peerDependencies": {
     "react": ">=16.8.0"
   },
