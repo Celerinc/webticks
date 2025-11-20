@@ -9,12 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "private": true,
-  "workspaces": [
-    "packages/core",
-    "packages/reactjs",
-    "packages/nextjs",
-    "packages/nodejs",
-    "examples/*"
-  ]
+  "private": true
 }

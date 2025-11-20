@@ -5,6 +5,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/core": "1.0.0"
+    "@webticks/core": "workspace:*"
   }
 }

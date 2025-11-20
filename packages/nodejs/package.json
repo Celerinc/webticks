@@ -8,10 +8,10 @@
         "src/"
     ],
     "dependencies": {
-        "@webticks/core": "1.0.0"
+        "@webticks/core": "workspace:*"
     },
     "peerDependencies": {
-        "@webticks/core": "1.0.0"
+        "@webticks/core": "workspace:*"
     },
     "license": "ISC"
 }
