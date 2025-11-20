@@ -14,6 +14,7 @@
     "packages/core",
     "packages/reactjs",
     "packages/nextjs",
-    "packages/nodejs"
+    "packages/nodejs",
+    "examples/*"
   ]
 }

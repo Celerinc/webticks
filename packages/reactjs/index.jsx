@@ -1,5 +1,5 @@
 'use client';
-import inject from '@webticks/core/inject.js';
+import inject from '@webticks/core';
 import { useEffect } from 'react';
 
 function WebTicksAnalytics() {

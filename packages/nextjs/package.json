@@ -5,6 +5,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/react": "1.0.0"
+    "@webticks/reactjs": "1.0.0"
   }
 }

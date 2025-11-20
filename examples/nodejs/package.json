@@ -8,7 +8,7 @@
         "start": "node demo-server.js"
     },
     "dependencies": {
-        "@webticks/nodejs": "1.0.0",
+        "@webticks/nodejs": "workspace:*",
         "express": "^4.18.2"
     }
 }
