@@ -45,17 +45,20 @@ app.get('/platform-adapters.js', (req, res) => {
 const allEvents = [];
 
 app.post('/api/track', (req, res) => {
-    const { uid, events, datetime } = req.body;
+    const { uid, sessionId, events, datetime } = req.body;
 
     console.log('\n📊 Analytics Batch Received');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`User ID: ${uid}`);
+    console.log(`Session ID: ${sessionId}`);
     console.log(`Date/Time: ${datetime}`);
     console.log(`Events Count: ${events.length}`);
     console.log('\nEvents:');
     events.forEach((event, index) => {
         console.log(`  ${index + 1}. [${event.type}] ${event.path || event.name || 'N/A'}`);
-        allEvents.push({ ...event, uid, receivedAt: datetime });
+        console.log(`      Request ID: ${event.requestId}`);
+        console.log(`      Timestamp: ${event.timestamp}`);
+        allEvents.push({ ...event, uid, sessionId, receivedAt: datetime });
     });
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
