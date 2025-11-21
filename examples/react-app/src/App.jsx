@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import WebTicksAnalytics from '@webticks/reactjs'
+import WebticksAnalytics from '@webticks/reactjs'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      <WebTicksAnalytics />
+      <WebticksAnalytics />
 
       <div>
         <a href="https://vite.dev" target="_blank">

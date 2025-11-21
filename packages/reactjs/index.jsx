@@ -2,11 +2,11 @@
 import inject from '@webticks/core';
 import { useEffect } from 'react';
 
-function WebTicksAnalytics() {
+function WebticksAnalytics() {
     useEffect(() => {
         inject();
     }, []);
     return null;
 }
 
-export default WebTicksAnalytics;
+export default WebticksAnalytics;

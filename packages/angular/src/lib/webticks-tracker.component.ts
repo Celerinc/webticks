@@ -6,7 +6,7 @@ import inject from '@webticks/core';
     template: '',
     standalone: true
 })
-export class WebticksAnalytics implements OnInit {
+export class WebticksTrackerComponent implements OnInit {
     ngOnInit() {
         inject();
     }

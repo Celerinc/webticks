@@ -1,4 +1,4 @@
-import WebticksTracker from './WebticksTracker.vue';
+import WebticksAnalytics from './WebticksAnalytics.vue';
 
-export { WebticksTracker };
-export default WebticksTracker;
+export { WebticksAnalytics };
+export default WebticksAnalytics;
