@@ -6,6 +6,7 @@
   "module": "injector.js",
   "exports": {
     ".": "./injector.js",
+    "./inject": "./injector.js",
     "./tracker": "./tracker.js",
     "./platform-adapters": "./platform-adapters.js"
   },

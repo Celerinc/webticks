@@ -2,8 +2,8 @@
     "name": "@webticks/angular-ts",
     "version": "1.0.0",
     "description": "Angular integration for webticks",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/public-api.js",
+    "types": "dist/public-api.d.ts",
     "scripts": {
         "build": "ngc"
     },
