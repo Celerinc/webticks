@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import WebTicksAnalytics from "../../../packages/reactjs";
+import WebTicksAnalytics from "@webticks/reactjs";
 import "./globals.css";
 
 const geistSans = Geist({
