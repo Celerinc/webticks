@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js App with WebTicks Analytics
 
-## Getting Started
+This example demonstrates how to integrate WebTicks analytics into a Next.js 16 application using the `@webticks/react` package with App Router.
 
-First, run the development server:
+## Features
+
+- Automatic page view tracking with App Router
+- Session and user ID management
+- Event batching to minimize API calls
+- Server-side rendering compatible
+- TypeScript support
+
+## Installation
+
+From the monorepo root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd examples/next-app
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+No environment variables are required for development. For production, create a `.env.local` file:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
+```
 
-## Learn More
+**Note:** Environment variables used in client-side code must be prefixed with `NEXT_PUBLIC_` in Next.js.
 
-To learn more about Next.js, take a look at the following resources:
+## Running the Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Development server:
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The app will be available at `http://localhost:3000`
 
-## Deploy on Vercel
+Build for production:
+```bash
+pnpm build
+pnpm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+WebTicks is integrated in the root layout (`app/layout.tsx`):
+
+```tsx
+import WebticksAnalytics from "@webticks/react";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <WebticksAnalytics />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+**Important:** The component must be placed in a Client Component context. Since layouts in Next.js App Router are Server Components by default, we use the `"use client"` directive in the WebTicks package.
+
+## Custom Event Tracking
+
+Track custom events in Client Components:
+
+```tsx
+'use client';
+
+export default function MyComponent() {
+  const handleClick = () => {
+    if (window.webticks) {
+      window.webticks.trackEvent('button_click', { 
+        page: 'home' 
+      });
+    }
+  };
+
+  return <button onClick={handleClick}>Track Event</button>;
+}
+```
+
+## Project Structure
+
+```
+app/
+├── layout.tsx        # Root layout with WebTicks
+├── page.tsx          # Home page
+└── globals.css       # Global styles
+```
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- @webticks/react
+
+## Next Steps
+
+- Configure your analytics backend URL via environment variables
+- Add custom event tracking for user interactions
+- Leverage Next.js routing for automatic page tracking
+
+For more information, see the [@webticks/react](../../packages/react) package documentation.

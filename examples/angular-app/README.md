@@ -1,59 +1,101 @@
-# AngularApp
+# Angular App with WebTicks Analytics
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+This example demonstrates how to integrate WebTicks analytics into an Angular application using the `@webticks/angular` package.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Automatic page view tracking
+- Session and user ID management
+- Event batching to minimize API calls
+- TypeScript support
 
-```bash
-ng serve
-```
+## Installation
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+From the monorepo root:
 
 ```bash
-ng generate component component-name
+cd examples/angular-app
+pnpm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Environment Variables
 
+No environment variables are required for development. The tracker is configured to send events to a local endpoint by default.
+
+For production, you can configure the backend URL in your environment:
+
+```typescript
+// In your app configuration
+{
+  backendUrl: environment.webticksUrl || 'https://your-analytics-backend.com/api/track'
+}
+```
+
+## Running the Application
+
+Development server:
 ```bash
-ng generate --help
+pnpm start
 ```
 
-## Building
+The app will be available at `http://localhost:4200`
 
-To build the project run:
-
+Build for production:
 ```bash
-ng build
+pnpm build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Usage
 
-## Running unit tests
+The WebTicks component is already integrated in `app.component.ts`:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+```typescript
+import { Component } from '@angular/core';
+import { WebticksTrackerComponent } from '@webticks/angular';
 
-```bash
-ng test
+@Component({
+  selector: 'app-root',
+  imports: [WebticksTrackerComponent],
+  template: `
+    <webticks-tracker />
+    <h1>Angular + WebTicks</h1>
+  `
+})
+export class AppComponent {}
 ```
 
-## Running end-to-end tests
+That's it! WebTicks will automatically:
+- Track page views
+- Monitor route changes
+- Batch and send events
+- Manage user sessions
 
-For end-to-end (e2e) testing, run:
+## Custom Event Tracking
 
-```bash
-ng e2e
+Track custom events anywhere in your application:
+
+```typescript
+if (window.webticks) {
+  window.webticks.trackEvent('button_click', { 
+    label: 'signup_button' 
+  });
+}
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Project Structure
 
-## Additional Resources
+```
+src/
+├── app/
+│   ├── app.component.ts      # Main app with WebTicks integration
+│   └── app.config.ts          # App configuration
+└── main.ts                    # Application bootstrap
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Next Steps
+
+- Customize the backend URL for your analytics service
+- Add custom event tracking for user interactions
+- Configure event batching intervals if needed
+
+For more information, see the [@webticks/angular](../../packages/angular) package documentation.

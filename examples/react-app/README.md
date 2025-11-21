@@ -1,16 +1,111 @@
-# React + Vite
+# React App with WebTicks Analytics
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This example demonstrates how to integrate WebTicks analytics into a React application using the `@webticks/react` package.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Automatic page view tracking
+- Session and user ID management
+- Event batching to minimize API calls
+- React hooks integration
+- Custom event tracking
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+From the monorepo root:
 
-## Expanding the ESLint configuration
+```bash
+cd examples/react-app
+pnpm install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Environment Variables
+
+No environment variables are required for development. The tracker is configured to send events to a local endpoint by default.
+
+For production, create a `.env` file:
+
+```env
+VITE_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
+```
+
+## Running the Application
+
+Development server:
+```bash
+pnpm dev
+```
+
+The app will be available at `http://localhost:5173`
+
+Build for production:
+```bash
+pnpm build
+```
+
+Preview production build:
+```bash
+pnpm preview
+```
+
+## Usage
+
+The WebTicks component is integrated in `App.jsx`:
+
+```jsx
+import WebticksAnalytics from '@webticks/react'
+
+function App() {
+  return (
+    <>
+      <WebticksAnalytics />
+      <h1>React + WebTicks</h1>
+      {/* Your app content */}
+    </>
+  )
+}
+```
+
+WebTicks will automatically:
+- Track page views
+- Monitor route changes
+- Batch and send events
+- Manage user sessions
+
+## Custom Event Tracking
+
+Track custom events in your components:
+
+```jsx
+const handleClick = () => {
+  if (window.webticks) {
+    window.webticks.trackEvent('button_click', { 
+      count: count + 1 
+    });
+  }
+  setCount(count + 1);
+};
+```
+
+## Project Structure
+
+```
+src/
+├── App.jsx           # Main app with WebTicks integration
+├── main.jsx          # Application entry point
+└── assets/           # Static assets
+```
+
+## Tech Stack
+
+- React 19
+- Vite 7
+- @webticks/react
+
+## Next Steps
+
+- Set up your analytics backend URL
+- Add custom event tracking for user interactions
+- Configure event batching intervals if needed
+
+For more information, see the [@webticks/react](../../packages/react) package documentation.

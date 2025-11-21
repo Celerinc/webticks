@@ -1,38 +1,111 @@
-# examples/vue-app
+# Vue App with WebTicks Analytics
 
-This template should help get you started developing with Vue 3 in Vite.
+This example demonstrates how to integrate WebTicks analytics into a Vue 3 application using the `@webticks/vue` package.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Automatic page view tracking
+- Session and user ID management
+- Event batching to minimize API calls
+- Vue 3 Composition API integration
+- Custom event tracking
 
-## Recommended Browser Setup
+## Installation
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+From the monorepo root:
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```bash
+cd examples/vue-app
+pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+## Environment Variables
 
-```sh
-npm run dev
+No environment variables are required for development. The tracker is configured to send events to a local endpoint by default.
+
+For production, create a `.env` file:
+
+```env
+VITE_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
 ```
 
-### Compile and Minify for Production
+## Running the Application
 
-```sh
-npm run build
+Development server:
+```bash
+pnpm dev
 ```
+
+The app will be available at `http://localhost:5173`
+
+Build for production:
+```bash
+pnpm build
+```
+
+Preview production build:
+```bash
+pnpm preview
+```
+
+## Usage
+
+The WebTicks component is integrated in `App.vue`:
+
+```vue
+<script setup>
+import { WebticksAnalytics } from '@webticks/vue'
+</script>
+
+<template>
+  <WebticksAnalytics />
+  <h1>Vue + WebTicks</h1>
+  <!-- Your app content -->
+</template>
+```
+
+WebTicks will automatically:
+- Track page views
+- Monitor route changes
+- Batch and send events
+- Manage user sessions
+
+## Custom Event Tracking
+
+Track custom events in your components:
+
+```vue
+<script setup>
+const handleClick = () => {
+  if (window.webticks) {
+    window.webticks.trackEvent('button_click', { 
+      action: 'signup' 
+    });
+  }
+};
+</script>
+```
+
+## Project Structure
+
+```
+src/
+├── App.vue           # Main app with WebTicks integration
+├── main.js           # Application entry point
+├── components/       # Vue components
+└── assets/           # Static assets
+```
+
+## Tech Stack
+
+- Vue 3.5
+- Vite 7
+- @webticks/vue
+
+## Next Steps
+
+- Set up your analytics backend URL
+- Add custom event tracking for user interactions
+- Use Vue Router for automatic route tracking
+
+For more information, see the [@webticks/vue](../../packages/vue) package documentation.

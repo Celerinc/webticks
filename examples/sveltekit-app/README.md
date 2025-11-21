@@ -1,38 +1,108 @@
-# sv
+# SvelteKit App with WebTicks Analytics
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This example demonstrates how to integrate WebTicks analytics into a SvelteKit application using the `@webticks/sveltekit` package.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Automatic page view tracking
+- Session and user ID management
+- Event batching to minimize API calls
+- SvelteKit routing integration
+- TypeScript support
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Installation
 
-# create a new project in my-app
-npx sv create my-app
+From the monorepo root:
+
+```bash
+cd examples/sveltekit-app
+pnpm install
 ```
 
-## Developing
+## Environment Variables
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+No environment variables are required for development. For production, create a `.env` file:
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```env
+PUBLIC_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
 ```
 
-## Building
+**Note:** Environment variables for client-side use in SvelteKit must be prefixed with `PUBLIC_`.
 
-To create a production version of your app:
+## Running the Application
 
-```sh
-npm run build
+Development server:
+```bash
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
+The app will be available at `http://localhost:5173`
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Build for production:
+```bash
+pnpm build
+pnpm preview
+```
+
+## Usage
+
+WebTicks can be integrated in your root layout (`src/routes/+layout.svelte`):
+
+```svelte
+<script>
+  import { WebticksAnalytics } from '@webticks/sveltekit';
+</script>
+
+<WebticksAnalytics />
+
+<slot />
+```
+
+WebTicks will automatically:
+- Track page views
+- Monitor navigation changes
+- Batch and send events
+- Manage user sessions
+
+## Custom Event Tracking
+
+Track custom events in your components:
+
+```svelte
+<script>
+  function handleClick() {
+    if (window.webticks) {
+      window.webticks.trackEvent('button_click', { 
+        action: 'download' 
+      });
+    }
+  }
+</script>
+
+<button on:click={handleClick}>Download</button>
+```
+
+## Project Structure
+
+```
+src/
+├── routes/
+│   ├── +layout.svelte    # Root layout (add WebTicks here)
+│   └── +page.svelte      # Home page
+└── app.html              # HTML template
+```
+
+## Tech Stack
+
+- SvelteKit 2
+- Svelte 5
+- Vite 7
+- @webticks/sveltekit
+
+## Next Steps
+
+- Configure your analytics backend URL via environment variables
+- Add custom event tracking for user interactions
+- Leverage SvelteKit routing for automatic page tracking
+
+For more information, see the [@webticks/sveltekit](../../packages/sveltekit) package documentation.

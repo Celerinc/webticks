@@ -1,83 +1,90 @@
-# WebTicks Vanilla JS Example
+# Vanilla JavaScript with WebTicks Analytics
 
-A simple HTML + JavaScript example demonstrating WebTicks integration without any build tools or frameworks.
+The simplest possible example of integrating WebTicks analytics using plain HTML and JavaScript.
 
 ## Features
 
-- ✅ Pure HTML/JavaScript (no build step required)
-- ✅ WebTicks core package integration
-- ✅ Automatic page view tracking
-- ✅ Custom event tracking
-- ✅ Interactive demo buttons
-- ✅ Console logging for debugging
+- Pure JavaScript (no framework)
+- Automatic page view tracking
+- Custom event tracking
+- Just one HTML file
 
-## How to Run
+## Installation
 
-### Option 1: Simple HTTP Server (Python)
+From the monorepo root:
+
 ```bash
 cd examples/vanilla-js
-python3 -m http.server 8000
-# Open http://localhost:8000
+pnpm install
 ```
 
-### Option 2: Node HTTP Server
+## Running the Example
+
+Open `index.html` in your browser, or use a local server:
+
 ```bash
-cd examples/vanilla-js
-npx http-server -p 8000
-# Open http://localhost:8000
+# Using Python
+python -m http.server 8000
+
+# Using Node
+npx http-server . -p 8000
+
+# Or just open the file
+open index.html
 ```
 
-### Option 3: VS Code Live Server
-1. Install "Live Server" extension in VS Code
-2. Right-click on `index.html`
-3. Select "Open with Live Server"
+Then visit `http://localhost:8000`
 
-## What's Demonstrated
+## How It Works
 
-### Automatic Tracking
-- **Page Views**: Automatically tracked when the page loads
-- **Navigation**: Tracked when using `history.pushState()`
+The entire integration is in `index.html`:
 
-### Custom Events
-Three interactive buttons demonstrate custom event tracking:
-1. **Track Custom Event** - Manual event with custom data
-2. **Navigate to /about** - Tests navigation tracking
-3. **Increment Counter** - Tracks counter increments
+```html
+<!-- Initialize WebTicks -->
+<script type="module">
+  import { inject } from '@webticks/core/injector';
 
-### Code Structure
-
-```javascript
-// 1. Import and initialize WebTicks
-import { inject } from '../../packages/core/injector.js';
-
-inject({
+  inject({
     backendUrl: '/api/track',
     debug: true
-});
+  });
+</script>
 
-// 2. Track custom events
-window.webticks.trackEvent('event_name', { data: 'value' });
+<!-- Track custom events -->
+<script>
+  function trackCustomEvent() {
+    window.webticks.trackEvent('button_click', { 
+      button: 'custom_event' 
+    });
+  }
+</script>
 ```
 
-## Console Output
+That's it! WebTicks will automatically track:
+- Initial page view
+- Custom events via `window.webticks.trackEvent()`
 
-Open your browser console to see:
-- ✅ Initialization messages
-- 📊 Tracker status (User ID, backend URL)
-- 📄 Page view events
-- ✅ Custom event confirmations
+## What You'll See
 
-## Key Features
+Open the browser console to see:
+- ✅ WebTicks initialization message
+- 📊 Tracked page views
+- 🔵 Custom event tracking
 
-- **No Dependencies**: Just HTML and JavaScript
-- **Module Import**: Uses ES6 modules to import WebTicks
-- **Local Package**: Imports directly from `packages/core`
-- **Interactive**: Multiple buttons to test different tracking scenarios
-- **Styled**: Clean, modern UI to make testing pleasant
+## Customization
 
-## Notes
+Change the backend URL for production:
 
-- This example imports directly from the local `packages/core` directory
-- In production, you would install `@webticks/core` via npm
-- The example uses relative imports which work with modern browsers
-- All tracking events are logged to the console for easy debugging
+```javascript
+inject({
+  backendUrl: 'https://your-analytics-backend.com/api/track'
+});
+```
+
+## Next Steps
+
+- Point `backendUrl` to your analytics server
+- Add more custom event tracking
+- Use in your own vanilla JS projects
+
+For more information, see the [@webticks/core](../../packages/core) package documentation.
