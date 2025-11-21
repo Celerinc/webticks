@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@webticks/vuejs": "workspace:*",
+    "@webticks/vue": "workspace:*",
     "vue": "^3.5.22"
   },
   "devDependencies": {

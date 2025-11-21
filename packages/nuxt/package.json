@@ -1,5 +1,5 @@
 {
-    "name": "@webticks/nuxtjs",
+    "name": "@webticks/nuxt",
     "version": "1.0.0",
     "description": "Nuxt integration for webticks",
     "main": "dist/module.mjs",

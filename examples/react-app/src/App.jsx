@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import WebticksAnalytics from '@webticks/reactjs'
+import WebticksAnalytics from '@webticks/react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'

@@ -1,5 +1,5 @@
 {
-    "name": "@webticks/nodejs",
+    "name": "@webticks/node",
     "version": "1.0.0",
     "type": "module",
     "description": "WebTicks Node.js server-side tracking",

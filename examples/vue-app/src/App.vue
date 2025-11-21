@@ -1,7 +1,7 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
-import { WebticksAnalytics } from '@webticks/vuejs'
+import { WebticksAnalytics } from '@webticks/vue'
 </script>
 
 <template>

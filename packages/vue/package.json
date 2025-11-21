@@ -1,5 +1,5 @@
 {
-    "name": "@webticks/vuejs",
+    "name": "@webticks/vue",
     "version": "1.0.0",
     "description": "Vue integration for webticks",
     "main": "src/index.js",

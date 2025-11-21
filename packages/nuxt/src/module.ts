@@ -2,7 +2,7 @@ import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
 
 export default defineNuxtModule({
     meta: {
-        name: '@webticks/nuxtjs',
+        name: '@webticks/nuxt',
         configKey: 'webticks'
     },
     setup(options, nuxt) {

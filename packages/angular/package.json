@@ -1,5 +1,5 @@
 {
-    "name": "@webticks/angular-ts",
+    "name": "@webticks/angular",
     "version": "1.0.0",
     "description": "Angular integration for webticks",
     "main": "dist/public-api.js",
