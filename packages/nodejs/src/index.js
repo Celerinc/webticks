@@ -33,9 +33,18 @@ import { NodeAdapter } from './adapter.js';
  * });
  */
 export function createServerTracker(config = {}) {
+    // Create the adapter first
+    const adapter = new NodeAdapter();
+
+    // Create tracker
     const tracker = new AnalyticsTracker(config);
-    // Override the adapter with Node-specific one
-    tracker.adapter = new NodeAdapter();
+
+    // Override the adapter with Node-specific one before initialization runs
+    tracker.adapter = adapter;
+
+    // Re-initialize user with the correct adapter
+    tracker.initializeUser();
+
     return tracker;
 }
 

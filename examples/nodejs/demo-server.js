@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Create tracker instance
 const tracker = createServerTracker({
@@ -33,12 +33,12 @@ app.use((req, res, next) => {
 
 // Serve tracker.js from core package
 app.get('/tracker.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../tracker.js'));
+    res.sendFile(path.join(__dirname, '../../packages/core/tracker.js'));
 });
 
 // Serve platform-adapters.js
 app.get('/platform-adapters.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../platform-adapters.js'));
+    res.sendFile(path.join(__dirname, '../../packages/core/platform-adapters.js'));
 });
 
 // API endpoint to receive tracked events (simulated backend)

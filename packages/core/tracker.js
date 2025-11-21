@@ -22,6 +22,11 @@ export class AnalyticsTracker {
   }
 
   initializeUser() {
+    // Skip if adapter is not available (will be initialized later in server environments)
+    if (!this.adapter) {
+      return;
+    }
+
     if (!this.userId) {
       this.userId = this.adapter.getUserId();
     }
