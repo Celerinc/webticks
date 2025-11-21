@@ -1,3 +1,4 @@
-import WebTicksAnalytics from '@webticks/react/index'
+"use client"
+import WebTicksAnalytics from '@webticks/reactjs/index'
 
 export default WebTicksAnalytics

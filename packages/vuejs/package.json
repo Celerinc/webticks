@@ -1,0 +1,11 @@
+{
+    "name": "@webticks/vuejs",
+    "version": "1.0.0",
+    "description": "Vue integration for webticks",
+    "main": "src/index.js",
+    "module": "src/index.js",
+    "peerDependencies": {
+        "vue": "^3.0.0",
+        "@webticks/core": "workspace:*"
+    }
+}
