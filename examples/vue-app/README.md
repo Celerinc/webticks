@@ -1,14 +1,27 @@
-# Vue App with WebTicks Analytics
+# Vue Pomodoro Timer with WebTicks Analytics
 
-This example demonstrates how to integrate WebTicks analytics into a Vue 3 application using the `@webticks/vue` package.
+This example demonstrates how to integrate WebTicks analytics into a Vue 3 application using the `@webticks/vue` package. The app is a fully-functional Pomodoro timer built with Vue 3 Composition API that tracks all user interactions and timer events.
 
 ## Features
 
+### Pomodoro Timer
+- **25-minute work sessions** (customizable)
+- **5-minute short breaks** (customizable)
+- **15-minute long breaks** after every 4 Pomodoros (customizable)
+- **Session counter** tracking completed Pomodoros
+- **Pause/Resume** functionality
+- **Reset** functionality
+- **Audio notifications** when sessions complete
+- **Settings panel** to customize timer durations
+- **Visual progress bar** showing session progress
+- **Color-coded states** (work = red, short break = green, long break = blue)
+
+### WebTicks Analytics Integration
 - Automatic page view tracking
 - Session and user ID management
 - Event batching to minimize API calls
 - Vue 3 Composition API integration
-- Custom event tracking
+- Comprehensive event tracking for all user interactions
 
 ## Installation
 
@@ -59,8 +72,7 @@ import { WebticksAnalytics } from '@webticks/vue'
 
 <template>
   <WebticksAnalytics />
-  <h1>Vue + WebTicks</h1>
-  <!-- Your app content -->
+  <!-- Your Pomodoro timer app -->
 </template>
 ```
 
@@ -70,27 +82,27 @@ WebTicks will automatically:
 - Batch and send events
 - Manage user sessions
 
-## Custom Event Tracking
+## Tracked Events
 
-Track custom events in your components:
+The Pomodoro timer tracks 9 event types through WebTicks:
 
-```vue
-<script setup>
-const handleClick = () => {
-  if (window.webticks) {
-    window.webticks.trackEvent('button_click', { 
-      action: 'signup' 
-    });
-  }
-};
-</script>
-```
+- **`pomodoro_started`** - Work session begins
+- **`pomodoro_completed`** - Work session completes
+- **`break_started`** - Break begins (short or long)
+- **`break_completed`** - Break completes
+- **`timer_paused`** - Timer paused
+- **`timer_resumed`** - Timer resumed
+- **`timer_reset`** - Timer reset
+- **`settings_changed`** - Settings modified
+- **`session_milestone`** - Every 4 Pomodoros
+
+All events include metadata: `sessionType`, `completedPomodoros`, `timestamp`, and event-specific data.
 
 ## Project Structure
 
 ```
 src/
-├── App.vue           # Main app with WebTicks integration
+├── App.vue           # Pomodoro timer with WebTicks integration
 ├── main.js           # Application entry point
 ├── components/       # Vue components
 └── assets/           # Static assets
@@ -105,7 +117,8 @@ src/
 ## Next Steps
 
 - Set up your analytics backend URL
-- Add custom event tracking for user interactions
-- Use Vue Router for automatic route tracking
+- Customize timer durations in the settings panel
+- Monitor event tracking in the browser console
 
 For more information, see the [@webticks/vue](../../packages/vue) package documentation.
+
