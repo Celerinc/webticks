@@ -1,10 +1,111 @@
 # Next.js Pomodoro Timer with WebTicks Analytics
 
-This example demonstrates how to integrate WebTicks analytics into a Next.js 16 application using the `@webticks/react` package with App Router. The app is a fully-functional Pomodoro timer built with TypeScript that tracks all user interactions and timer events.
+This example demonstrates how to integrate WebTicks analytics into a Next.js application with the App Router. The app is a fully-functional Pomodoro timer built with TypeScript.
 
-## Features
+## 🎯 What You'll Learn
 
-### Pomodoro Timer
+- How to install and configure WebTicks in Next.js App Router
+- How to use WebTicks in Client Components
+- How to track custom events with TypeScript
+- Best practices for analytics in Next.js applications
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+cd examples/next-app
+pnpm install
+pnpm dev
+```
+
+Open `http://localhost:3000` to see the Pomodoro timer in action.
+
+## 📦 WebTicks Integration Tutorial
+
+### Step 1: Install WebTicks
+
+```bash
+pnpm add @webticks/react
+```
+
+### Step 2: Add to Root Layout
+
+In `app/layout.tsx`, import and render the `WebticksAnalytics` component:
+
+```tsx
+import WebticksAnalytics from '@webticks/react'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <WebticksAnalytics />
+        {children}
+      </body>
+    </html>
+  )
+}
+```
+
+**Important:** Place `WebticksAnalytics` in the root layout to track across all pages.
+
+### Step 3: Use in Client Components
+
+Mark components that track events with `'use client'`:
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+
+export default function Page() {
+  const handleClick = () => {
+    if (window.webticks) {
+      window.webticks.trackEvent('button_click', {
+        page: 'home',
+        timestamp: new Date().toISOString()
+      })
+    }
+  }
+  
+  return <button onClick={handleClick}>Track Event</button>
+}
+```
+
+### Step 4: Add TypeScript Types
+
+Extend the Window interface for type safety:
+
+```tsx
+declare global {
+  interface Window {
+    webticks?: {
+      trackEvent: (eventName: string, metadata?: Record<string, any>) => void
+    }
+  }
+}
+```
+
+### Step 5: Create Tracking Helpers
+
+```tsx
+const trackEvent = (eventName: string, metadata: Record<string, any> = {}) => {
+  if (window.webticks) {
+    const eventData = {
+      ...metadata,
+      timestamp: new Date().toISOString()
+    }
+    window.webticks.trackEvent(eventName, eventData)
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+  }
+}
+```
+
+## 🍅 Pomodoro App Features
+
+This example implements a complete Pomodoro timer with:
+
 - **25-minute work sessions** (customizable)
 - **5-minute short breaks** (customizable)
 - **15-minute long breaks** after every 4 Pomodoros (customizable)
@@ -13,158 +114,140 @@ This example demonstrates how to integrate WebTicks analytics into a Next.js 16 
 - **Reset** functionality
 - **Audio notifications** when sessions complete
 - **Settings panel** to customize timer durations
-- **Visual progress bar** showing session progress
-- **Color-coded states** (work = red, short break = green, long break = blue)
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling with dark mode support
+- **Visual progress bar** with Tailwind CSS animations
+- **Color-coded states** with Tailwind gradients
+- **Dark mode support** out of the box
 
-### WebTicks Analytics Integration
-- Automatic page view tracking with App Router
-- Session and user ID management
-- Event batching to minimize API calls
-- Server-side rendering compatible
-- TypeScript support
-- Comprehensive event tracking for all user interactions
+## 📊 Tracked Events
 
-## Installation
+The Pomodoro timer tracks 9 event types:
 
-From the monorepo root:
+| Event Name | When It Fires | Metadata Included |
+|------------|---------------|-------------------|
+| `pomodoro_started` | Work session begins | `duration`, `sessionType`, `completedPomodoros` |
+| `pomodoro_completed` | Work session completes | `duration`, `totalCompleted` |
+| `break_started` | Break begins | `breakType` (short/long), `duration` |
+| `break_completed` | Break completes | `breakType`, `duration` |
+| `timer_paused` | User pauses timer | `timeRemaining`, `timeElapsed` |
+| `timer_resumed` | User resumes timer | `timeRemaining` |
+| `timer_reset` | User resets timer | `previousTimeLeft`, `resetTo` |
+| `settings_changed` | User modifies settings | `settingType`, `newValue`, `unit` |
+| `session_milestone` | Every 4 Pomodoros | `milestone`, `message` |
 
-```bash
-cd examples/next-app
-pnpm install
-```
+## 💡 Best Practices
 
-## Environment Variables
-
-No environment variables are required for development. For production, create a `.env.local` file:
-
-```env
-NEXT_PUBLIC_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
-```
-
-**Note:** Environment variables used in client-side code must be prefixed with `NEXT_PUBLIC_` in Next.js.
-
-## Running the Application
-
-Development server:
-```bash
-pnpm dev
-```
-
-The app will be available at `http://localhost:3000`
-
-Build for production:
-```bash
-pnpm build
-pnpm start
-```
-
-## Usage
-
-WebTicks is integrated in the root layout (`app/layout.tsx`):
+### 1. Use Client Components for Tracking
 
 ```tsx
-import WebticksAnalytics from "@webticks/react";
+'use client'
 
+export default function TrackedComponent() {
+  // Can access window.webticks here
+}
+```
+
+### 2. Environment Variables
+
+Use `NEXT_PUBLIC_` prefix for client-side variables:
+
+```env
+NEXT_PUBLIC_WEBTICKS_BACKEND_URL=https://your-backend.com/api/track
+```
+
+### 3. Type Safety with TypeScript
+
+```tsx
+type EventMetadata = {
+  sessionType: 'work' | 'shortBreak' | 'longBreak'
+  completedPomodoros: number
+  timestamp: string
+}
+
+const trackEvent = (name: string, metadata: EventMetadata) => {
+  if (window.webticks) {
+    window.webticks.trackEvent(name, metadata)
+  }
+}
+```
+
+### 4. Server vs Client Components
+
+- **Server Components**: Cannot access `window.webticks`
+- **Client Components**: Can track events with `'use client'`
+
+### 5. App Router Patterns
+
+```tsx
+// app/layout.tsx - Root layout with WebTicks
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html>
       <body>
         <WebticksAnalytics />
         {children}
       </body>
     </html>
-  );
+  )
+}
+
+// app/page.tsx - Client component for tracking
+'use client'
+export default function Page() {
+  // Track events here
 }
 ```
 
-**Important:** The component must be placed in a Client Component context. Since layouts in Next.js App Router are Server Components by default, we use the `"use client"` directive in the WebTicks package.
+## 🔧 Configuration
 
-## Tracked Events
+### Environment Variables
 
-The Pomodoro timer tracks the following events through WebTicks:
+Create `.env.local`:
 
-### Timer Events
-- **`pomodoro_started`** - Fired when a work session begins
-  - Metadata: `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-  
-- **`pomodoro_completed`** - Fired when a work session completes
-  - Metadata: `duration`, `totalCompleted`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`break_started`** - Fired when a break begins (short or long)
-  - Metadata: `breakType`, `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`break_completed`** - Fired when a break completes
-  - Metadata: `breakType`, `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-
-### User Interaction Events
-- **`timer_paused`** - Fired when user pauses the timer
-  - Metadata: `timeRemaining`, `timeElapsed`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`timer_resumed`** - Fired when user resumes the timer
-  - Metadata: `timeRemaining`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`timer_reset`** - Fired when user resets the timer
-  - Metadata: `previousTimeLeft`, `resetTo`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`settings_changed`** - Fired when user modifies timer durations
-  - Metadata: `settingType`, `newValue`, `unit`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`settings_toggled`** - Fired when user opens/closes settings panel
-  - Metadata: `opened`, `sessionType`, `completedPomodoros`, `timestamp`
-
-### Milestone Events
-- **`session_milestone`** - Fired every 4 completed Pomodoros
-  - Metadata: `milestone`, `message`, `sessionType`, `completedPomodoros`, `timestamp`
-
-## TypeScript Types
-
-The app uses TypeScript for type safety:
-
-```tsx
-type SessionType = 'work' | 'shortBreak' | 'longBreak';
-
-const trackEvent = (eventName: string, metadata: Record<string, any> = {}) => {
-  // Track events with type-safe metadata
-};
+```env
+NEXT_PUBLIC_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
 ```
 
-## Viewing Tracked Events
+### Next.js Config
 
-Open your browser's developer console to see WebTicks event logs. Each tracked event will appear with the prefix:
+No special configuration needed! WebTicks works out of the box with:
+- App Router
+- Server Components
+- Client Components
+- TypeScript
 
-```
-✅ WebTicks tracked: <event_name>
-```
-
-followed by the event metadata.
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 app/
-├── layout.tsx        # Root layout with WebTicks
-├── page.tsx          # Pomodoro timer component
-├── globals.css       # Global styles
-└── favicon.ico       # Favicon
+├── layout.tsx        # Root layout with WebticksAnalytics
+├── page.tsx          # Pomodoro timer (Client Component)
+└── globals.css       # Tailwind CSS styles
 ```
 
-## Tech Stack
+## 🎨 Viewing Tracked Events
 
-- Next.js 16 (App Router)
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- @webticks/react
+Open your browser's Developer Console:
 
-## Next Steps
+```
+✅ WebTicks tracked: pomodoro_started {
+  duration: 1500,
+  sessionType: "work",
+  completedPomodoros: 0,
+  timestamp: "2025-12-04T15:30:00.000Z"
+}
+```
 
-- Configure your analytics backend URL via environment variables
-- Customize timer durations in the settings panel
-- Monitor event tracking in the browser console
-- Leverage Next.js routing for automatic page tracking
-- Explore TypeScript types for custom event metadata
+## 🔗 Learn More
 
-For more information, see the [@webticks/react](../../packages/react) package documentation.
+- [WebTicks Core Documentation](../../packages/core)
+- [Next.js App Router](https://nextjs.org/docs/app)
+- [Client Components](https://nextjs.org/docs/app/building-your-application/rendering/client-components)
 
+## 📝 Example Code
+
+See [`app/page.tsx`](./app/page.tsx) for the complete implementation showing:
+- TypeScript types for event metadata
+- Client Component with `'use client'`
+- Tailwind CSS for styling
+- Dark mode support
+- Event tracking for all user interactions

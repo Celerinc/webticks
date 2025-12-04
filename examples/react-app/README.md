@@ -1,10 +1,91 @@
 # React Pomodoro Timer with WebTicks Analytics
 
-This example demonstrates how to integrate WebTicks analytics into a React application using the `@webticks/react` package. The app is a fully-functional Pomodoro timer that tracks all user interactions and timer events.
+This example demonstrates how to integrate WebTicks analytics into a React application. The app is a fully-functional Pomodoro timer that tracks all user interactions and timer events.
 
-## Features
+## 🎯 What You'll Learn
 
-### Pomodoro Timer
+- How to install and configure WebTicks in React
+- How to track custom events with metadata
+- How to implement comprehensive analytics in a real application
+- Best practices for event tracking
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+cd examples/react-app
+pnpm install
+pnpm dev
+```
+
+Open `http://localhost:5173` to see the Pomodoro timer in action.
+
+## 📦 WebTicks Integration Tutorial
+
+### Step 1: Install WebTicks
+
+```bash
+pnpm add @webticks/react
+```
+
+### Step 2: Add the Analytics Component
+
+In your main `App.jsx`, import and render the `WebticksAnalytics` component:
+
+```jsx
+import WebticksAnalytics from '@webticks/react'
+
+function App() {
+  return (
+    <>
+      <WebticksAnalytics />
+      {/* Your app content */}
+    </>
+  )
+}
+```
+
+**That's it!** Page views are now automatically tracked.
+
+### Step 3: Track Custom Events
+
+Use `window.webticks.trackEvent()` to track any custom event:
+
+```jsx
+const handleButtonClick = () => {
+  if (window.webticks) {
+    window.webticks.trackEvent('button_click', {
+      buttonName: 'start_timer',
+      timestamp: new Date().toISOString()
+    })
+  }
+}
+```
+
+### Step 4: Add Event Metadata
+
+Include relevant context with every event:
+
+```jsx
+const trackEvent = (eventName, metadata = {}) => {
+  if (window.webticks) {
+    const eventData = {
+      ...metadata,
+      sessionType: 'work',
+      completedPomodoros: 5,
+      timestamp: new Date().toISOString()
+    }
+    window.webticks.trackEvent(eventName, eventData)
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+  }
+}
+```
+
+## 🍅 Pomodoro App Features
+
+This example implements a complete Pomodoro timer with:
+
 - **25-minute work sessions** (customizable)
 - **5-minute short breaks** (customizable)
 - **15-minute long breaks** after every 4 Pomodoros (customizable)
@@ -16,99 +97,82 @@ This example demonstrates how to integrate WebTicks analytics into a React appli
 - **Visual progress bar** showing session progress
 - **Color-coded states** (work = red, short break = green, long break = blue)
 
-### WebTicks Analytics Integration
-- Automatic page view tracking
-- Session and user ID management
-- Event batching to minimize API calls
-- React hooks integration
-- Comprehensive event tracking for all user interactions
+## 📊 Tracked Events
 
-## Installation
+The Pomodoro timer tracks 9 event types:
 
-From the monorepo root:
+| Event Name | When It Fires | Metadata Included |
+|------------|---------------|-------------------|
+| `pomodoro_started` | Work session begins | `duration`, `sessionType`, `completedPomodoros` |
+| `pomodoro_completed` | Work session completes | `duration`, `totalCompleted` |
+| `break_started` | Break begins | `breakType` (short/long), `duration` |
+| `break_completed` | Break completes | `breakType`, `duration` |
+| `timer_paused` | User pauses timer | `timeRemaining`, `timeElapsed` |
+| `timer_resumed` | User resumes timer | `timeRemaining` |
+| `timer_reset` | User resets timer | `previousTimeLeft`, `resetTo` |
+| `settings_changed` | User modifies settings | `settingType`, `newValue`, `unit` |
+| `session_milestone` | Every 4 Pomodoros | `milestone`, `message` |
 
-```bash
-cd examples/react-app
-pnpm install
+All events automatically include:
+- `sessionType` - Current session type (work/shortBreak/longBreak)
+- `completedPomodoros` - Total Pomodoros completed
+- `timestamp` - ISO 8601 timestamp
+
+## 💡 Best Practices
+
+### 1. Always Check for WebTicks Availability
+
+```jsx
+if (window.webticks) {
+  window.webticks.trackEvent('event_name', metadata)
+}
 ```
 
-## Environment Variables
+### 2. Use Consistent Event Names
 
-No environment variables are required for development. The tracker is configured to send events to a local endpoint by default.
+Use snake_case for event names: `timer_started`, `button_clicked`, `form_submitted`
 
-For production, create a `.env` file:
+### 3. Include Relevant Context
+
+```jsx
+trackEvent('timer_paused', {
+  timeRemaining: 1200,
+  timeElapsed: 300,
+  sessionType: 'work'
+})
+```
+
+### 4. Log Events for Debugging
+
+```jsx
+console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+```
+
+### 5. Create Helper Functions
+
+```jsx
+const trackEvent = (eventName, metadata = {}) => {
+  if (window.webticks) {
+    const eventData = {
+      ...metadata,
+      // Add common metadata
+      timestamp: new Date().toISOString()
+    }
+    window.webticks.trackEvent(eventName, eventData)
+  }
+}
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file for production:
 
 ```env
 VITE_WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
 ```
 
-## Running the Application
-
-Development server:
-```bash
-pnpm dev
-```
-
-The app will be available at `http://localhost:5173`
-
-Build for production:
-```bash
-pnpm build
-```
-
-Preview production build:
-```bash
-pnpm preview
-```
-
-## Usage
-
-The WebTicks component is integrated in `App.jsx`:
-
-```jsx
-import WebticksAnalytics from '@webticks/react'
-
-function App() {
-  return (
-    <>
-      <WebticksAnalytics />
-      {/* Your Pomodoro timer app */}
-    </>
-  )
-}
-```
-
-WebTicks will automatically:
-- Track page views
-- Monitor route changes
-- Batch and send events
-- Manage user sessions
-
-## Tracked Events
-
-The Pomodoro timer tracks the following events through WebTicks:
-
-### Timer Events
-- **`pomodoro_started`** - Fired when a work session begins
-  - Metadata: `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-  
-- **`pomodoro_completed`** - Fired when a work session completes
-  - Metadata: `duration`, `totalCompleted`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`break_started`** - Fired when a break begins (short or long)
-  - Metadata: `breakType`, `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`break_completed`** - Fired when a break completes
-  - Metadata: `breakType`, `duration`, `sessionType`, `completedPomodoros`, `timestamp`
-
-### User Interaction Events
-- **`timer_paused`** - Fired when user pauses the timer
-  - Metadata: `timeRemaining`, `timeElapsed`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`timer_resumed`** - Fired when user resumes the timer
-  - Metadata: `timeRemaining`, `sessionType`, `completedPomodoros`, `timestamp`
-
-- **`timer_reset`** - Fired when user resets the timer
   - Metadata: `previousTimeLeft`, `resetTo`, `sessionType`, `completedPomodoros`, `timestamp`
 
 - **`settings_changed`** - Fired when user modifies timer durations
