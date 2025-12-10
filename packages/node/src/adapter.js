@@ -42,12 +42,19 @@ export class NodeAdapter {
     }
 
     // Send HTTP request
-    async sendRequest(url, data) {
+    async sendRequest(url, data, appId) {
         // Use native fetch (Node.js 18+)
         if (typeof fetch !== 'undefined') {
+            const headers = { 'Content-Type': 'application/json' };
+
+            // Add webticks-app-id header if appId is provided
+            if (appId) {
+                headers['webticks-app-id'] = appId;
+            }
+
             return fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(data)
             });
         }

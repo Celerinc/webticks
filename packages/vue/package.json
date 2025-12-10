@@ -4,8 +4,10 @@
     "description": "Vue integration for webticks",
     "main": "src/index.js",
     "module": "src/index.js",
-    "peerDependencies": {
-        "vue": "^3.0.0",
+    "dependencies": {
         "@webticks/core": "workspace:*"
+    },
+    "peerDependencies": {
+        "vue": "^3.0.0"
     }
 }

@@ -46,3 +46,66 @@ Working example applications demonstrating WebTicks integration:
 - **[NestJS](./examples/nestjs-app)** - NestJS REST API with middleware tracking
 
 Each example includes complete setup instructions and demonstrates best practices for integrating WebTicks into your application.
+
+## Development Setup
+
+This project uses a hybrid approach for dependency management:
+- **Packages** (`packages/*`): Use pnpm workspace for fast internal linking
+- **Examples** (`examples/*`): Use [yalc](https://github.com/wclr/yalc) for realistic npm-like testing
+
+### Quick Start
+
+1. **Install workspace dependencies:**
+   ```bash
+   pnpm install
+   ```
+   This installs all package dependencies and creates workspace symlinks between packages.
+
+2. **Install yalc globally:**
+   ```bash
+   npm install -g yalc
+   ```
+
+3. **Publish packages locally with yalc:**
+   ```bash
+   cd packages/core && yalc publish && cd ../..
+   cd packages/react && yalc publish && cd ../..
+   # Repeat for other packages as needed
+   ```
+
+4. **Use in example apps:**
+   ```bash
+   cd examples/react-app
+   yalc add @webticks/react
+   npm install
+   npm run dev
+   ```
+
+For detailed instructions, see [YALC_GUIDE.md](./YALC_GUIDE.md).
+
+## Configuration
+
+### App ID
+
+WebTicks supports sending an application ID with each tracking request via the `webticks-app-id` header. This is useful for identifying different applications or environments in your analytics backend.
+
+**Set via environment variable:**
+
+```bash
+# For Node.js apps
+export WEBTICKS_APP_ID=your-app-id-here
+
+# For Vite-based apps (React, Vue, etc.)
+VITE_WEBTICKS_APP_ID=your-app-id-here
+```
+
+**Set via configuration:**
+
+```javascript
+const tracker = new AnalyticsTracker({
+  backendUrl: '/api/track',
+  appId: 'your-app-id-here'
+});
+```
+
+The app ID will be automatically included as a custom header (`webticks-app-id`) in all HTTP requests to your analytics backend.

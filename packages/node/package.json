@@ -10,8 +10,5 @@
     "dependencies": {
         "@webticks/core": "workspace:*"
     },
-    "peerDependencies": {
-        "@webticks/core": "workspace:*"
-    },
     "license": "ISC"
 }

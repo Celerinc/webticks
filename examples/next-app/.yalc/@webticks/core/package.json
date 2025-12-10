@@ -1,0 +1,21 @@
+{
+  "name": "@webticks/core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "injector.js",
+  "module": "injector.js",
+  "exports": {
+    ".": "./injector.js",
+    "./inject": "./injector.js",
+    "./tracker": "./tracker.js",
+    "./platform-adapters": "./platform-adapters.js"
+  },
+  "files": [
+    "tracker.js",
+    "injector.js",
+    "platform-adapters.js",
+    "README.md"
+  ],
+  "license": "ISC",
+  "yalcSig": "3b9fa35a255fc2a56915bc484e488d05"
+}

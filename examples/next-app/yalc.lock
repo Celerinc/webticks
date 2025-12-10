@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "packages": {
+    "@webticks/react": {
+      "signature": "7938cef71cc4150a46016eafd954654c",
+      "file": true,
+      "replaced": "1.0.0"
+    },
+    "@webticks/core": {
+      "signature": "3b9fa35a255fc2a56915bc484e488d05",
+      "file": true
+    }
+  }
+}

@@ -12,7 +12,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
-		"@webticks/sveltekit": "workspace:*"
+		"@webticks/sveltekit": "1.0.0"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",
