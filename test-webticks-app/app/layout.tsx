@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WebTicks Test App",
-  description: "Testing WebTicks analytics with yalc",
+  title: "Pomodoro Timer",
+  description: "Focus timer with WebTicks analytics tracking",
 };
 
 export default function RootLayout({
