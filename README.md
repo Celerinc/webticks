@@ -1,111 +1,99 @@
-# WebTicks
+# WebTicks Analytics
 
-A lightweight, universal analytics tracking library for modern web applications. Automatically tracks page views, page changes, and custom events with built-in event batching to minimize backend calls.
+WebTicks is a powerful, lightweight analytics library designed for modern web applications. It provides seamless event tracking and page view monitoring with built-in batching and platform adapters for both browser and server environments.
 
-## Supported Frameworks
+## 1. Installation
 
-WebTicks provides official integrations for all major frameworks:
-
-- **[@webticks/angular](./packages/angular)** - Angular components
-- **[@webticks/react](./packages/react)** - React hooks and components
-- **[@webticks/vue](./packages/vue)** - Vue 3 composables and components
-- **[@webticks/next](./packages/nextjs)** - Next.js App Router compatible
-- **[@webticks/nuxt](./packages/nuxt)** - Nuxt 3 modules
-- **[@webticks/sveltekit](./packages/sveltekit)** - SvelteKit components
-- **[@webticks/node](./packages/node)** - Server-side tracking for Node.js/Express
-- **[@webticks/core](./packages/core)** - Framework-agnostic core library
-
-## Features
-
-- **Lightweight & Fast** - Minimal overhead, maximum performance
-- **Event Batching** - Reduces API calls by queuing and sending events in bulk
-- **Auto Page Tracking** - Automatically detects and tracks page changes in SPAs
-- **Universal** - Works with any JavaScript framework or vanilla JS
-- **Drop-in Integration** - Simple setup with framework-specific components
-- **Privacy Focused** - Session and user ID management built-in
-- **Server & Client** - Track events on both client and server side
-- **Debug Mode** - Built-in logging for development
-
-## Examples
-
-Working example applications demonstrating WebTicks integration:
-
-### Client-Side Examples
-
-- **[Angular](./examples/angular-app)** - Angular application with WebTicks component
-- **[React](./examples/react-app)** - React app using WebTicks hooks
-- **[Vue](./examples/vue-app)** - Vue 3 app with WebTicks composables
-- **[Next.js](./examples/next-app)** - Next.js 16 with App Router integration
-- **[Nuxt](./examples/nuxt-app)** - Nuxt 3 module integration
-- **[SvelteKit](./examples/sveltekit-app)** - SvelteKit with WebTicks components
-- **[Vanilla JS](./examples/vanilla-js)** - Plain JavaScript integration
-
-### Server-Side Examples
-
-- **[Node.js/Express](./examples/node-app)** - Express server with request tracking
-- **[NestJS](./examples/nestjs-app)** - NestJS REST API with middleware tracking
-
-Each example includes complete setup instructions and demonstrates best practices for integrating WebTicks into your application.
-
-## Development Setup
-
-This project uses a hybrid approach for dependency management:
-- **Packages** (`packages/*`): Use pnpm workspace for fast internal linking
-- **Examples** (`examples/*`): Use [yalc](https://github.com/wclr/yalc) for realistic npm-like testing
-
-### Quick Start
-
-1. **Install workspace dependencies:**
-   ```bash
-   pnpm install
-   ```
-   This installs all package dependencies and creates workspace symlinks between packages.
-
-2. **Install yalc globally:**
-   ```bash
-   npm install -g yalc
-   ```
-
-3. **Publish packages locally with yalc:**
-   ```bash
-   cd packages/core && yalc publish && cd ../..
-   cd packages/react && yalc publish && cd ../..
-   # Repeat for other packages as needed
-   ```
-
-4. **Use in example apps:**
-   ```bash
-   cd examples/react-app
-   yalc add @webticks/react
-   npm install
-   npm run dev
-   ```
-
-For detailed instructions, see [YALC_GUIDE.md](./YALC_GUIDE.md).
-
-## Configuration
-
-### App ID
-
-WebTicks supports sending an application ID with each tracking request via the `webticks-app-id` header. This is useful for identifying different applications or environments in your analytics backend.
-
-**Set via environment variable:**
-
+### Browser (Frontend)
 ```bash
-# For Node.js apps
-export WEBTICKS_APP_ID=your-app-id-here
-
-# For Vite-based apps (React, Vue, etc.)
-VITE_WEBTICKS_APP_ID=your-app-id-here
+npm install @webticks/core
+# or
+pnpm add @webticks/core
+# or
+bun add @webticks/core
 ```
 
-**Set via configuration:**
+### Node.js (Backend)
+```bash
+npm install @webticks/node
+# or
+pnpm add @webticks/node
+# or
+bun add @webticks/node
+```
 
+## 2. Initialization
+
+### Frontend (React, Vue, Next.js Client)
 ```javascript
+import { AnalyticsTracker } from '@webticks/core/tracker';
+
 const tracker = new AnalyticsTracker({
-  backendUrl: '/api/track',
-  appId: 'your-app-id-here'
+  backendUrl: "https://your-api.com/api/track",
+  appId: "your-application-id"
 });
 ```
 
-The app ID will be automatically included as a custom header (`webticks-app-id`) in all HTTP requests to your analytics backend.
+### Backend (Express, NestJS, Next.js Server)
+```javascript
+import { createServerTracker } from '@webticks/node';
+
+const tracker = createServerTracker({
+  backendUrl: "https://your-api.com/api/track",
+  appId: "your-application-id"
+});
+```
+
+## 3. Usage & Tracking
+
+### Automatic Tracking
+Enable automatic page view tracking in the browser or request tracking in Node.js:
+
+```javascript
+// Browser: Tracks URL changes automatically
+// Node.js: Tracks incoming requests automatically
+tracker.autoTrackPageViews();
+```
+
+### Custom Event Tracking
+Track custom user interactions manually from either environment:
+
+```javascript
+tracker.trackEvent('button_clicked', { 
+  buttonId: 'checkout-btn',
+  amount: 49.99
+});
+```
+
+### Backend Middleware (Express Example)
+Capture backend request data easily:
+
+```javascript
+app.use((req, res, next) => {
+  tracker.trackServerRequest({
+    method: req.method,
+    path: req.url,
+    headers: req.headers
+  });
+  next();
+});
+```
+
+## 4. Cleanup
+
+When the application or component is unmounting, clean up the tracker:
+
+```javascript
+tracker.destroy();
+```
+
+## Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `backendUrl` | `string` | The endpoint where analytics data will be sent. |
+| `appId` | `string` | Your unique application identifier for validation. |
+
+---
+
+Made with ❤️ by the WebTicks Team.
