@@ -1,10 +1,10 @@
 {
-  "name": "@webticks/react",
-  "version": "1.0.0",
+  "name": "@webticks/next",
+  "version": "0.0.1",
   "peerDependencies": {
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/react": "1.0.0"
+    "@webticks/react": "workspace:*"
   }
 }

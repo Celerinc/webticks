@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "packages": {
+    "@webticks/react": {
+      "signature": "7938cef71cc4150a46016eafd954654c",
+      "file": true
+    },
+    "@webticks/core": {
+      "signature": "3b9fa35a255fc2a56915bc484e488d05",
+      "file": true
+    },
+    "@webticks/next": {
+      "signature": "8225530809ce4e6e3ef68d2a8639b926",
+      "file": true
+    }
+  }
+}

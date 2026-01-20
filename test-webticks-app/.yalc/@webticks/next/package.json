@@ -1,0 +1,11 @@
+{
+  "name": "@webticks/next",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "@webticks/react": "1.0.0"
+  },
+  "yalcSig": "8225530809ce4e6e3ef68d2a8639b926"
+}

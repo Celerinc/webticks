@@ -1,0 +1,13 @@
+{
+  "name": "@webticks/react",
+  "version": "0.0.1",
+  "main": "index.jsx",
+  "module": "index.jsx",
+  "type": "module",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "@webticks/core": "workspace:*"
+  }
+}

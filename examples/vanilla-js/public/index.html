@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTicks Browser Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        #eventLog {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .event-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .event-type {
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .event-time {
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.active {
+            background: #48bb78;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 WebTicks Demo</h1>
+            <p>Live Browser & Server-Side Analytics Tracking</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tracking Status <span class="status active" id="status">Active</span></h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="pageviewCount">0</div>
+                    <div class="stat-label">Page Views</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="eventCount">0</div>
+                    <div class="stat-label">Custom Events</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="queueCount">0</div>
+                    <div class="stat-label">Queued Events</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Test Actions</h2>
+            <div class="button-group">
+                <button onclick="trackCustomEvent()">Track Custom Event</button>
+                <button onclick="trackButtonClick()">Track Button Click</button>
+                <button onclick="testServerRequest()">Test Server Request</button>
+                <button onclick="clearLog()">Clear Log</button>
+            </div>
+            
+            <h3 style="margin: 20px 0 10px 0; color: #4a5568;">Navigation Test:</h3>
+            <div class="nav-links">
+                <a href="/about">About Page</a>
+                <a href="/products">Products Page</a>
+                <a href="/contact">Contact Page</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Event Log</h2>
+            <div id="eventLog">
+                <div class="event-item">
+                    <span class="event-type">INFO</span>
+                    <span>Waiting for events...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the tracker
+        import { AnalyticsTracker } from '/tracker.js';
+
+        // Create tracker instance
+        const tracker = new AnalyticsTracker({
+            backendUrl: '/api/track'
+        });
+
+        // Make it globally accessible for demo purposes
+        window.tracker = tracker;
+
+        // Start auto-tracking
+        tracker.autoTrackPageViews();
+
+        // Event counters
+        let pageviewCount = 0;
+        let eventCount = 0;
+
+        // Log events to the UI
+        function logEvent(type, message) {
+            const log = document.getElementById('eventLog');
+            const time = new Date().toLocaleTimeString();
+            
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item';
+            eventItem.innerHTML = `
+                <span class="event-type">${type}</span>
+                <span>${message}</span>
+                <span class="event-time">${time}</span>
+            `;
+            
+            log.insertBefore(eventItem, log.firstChild);
+            
+            // Keep only last 20 events
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+
+            updateStats();
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('queueCount').textContent = tracker.eventQueue.length;
+            document.getElementById('pageviewCount').textContent = pageviewCount;
+            document.getElementById('eventCount').textContent = eventCount;
+        }
+
+        // Track custom event
+        window.trackCustomEvent = function() {
+            tracker.trackEvent('custom_test', {
+                action: 'button_click',
+                timestamp: Date.now(),
+                random: Math.random()
+            });
+            eventCount++;
+            logEvent('EVENT', 'Custom event tracked: custom_test');
+        };
+
+        // Track button click
+        window.trackButtonClick = function() {
+            tracker.trackEvent('button_click', {
+                buttonName: 'Test Button',
+                page: window.location.pathname
+            });
+            eventCount++;
+            logEvent('EVENT', 'Button click tracked');
+        };
+
+        // Test server request
+        window.testServerRequest = async function() {
+            try {
+                logEvent('API', 'Sending test request to server...');
+                const response = await fetch('/api/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test: true })
+                });
+                const data = await response.json();
+                logEvent('API', `Server response: ${data.message}`);
+            } catch (err) {
+                logEvent('ERROR', `Server request failed: ${err.message}`);
+            }
+        };
+
+        // Clear log
+        window.clearLog = function() {
+            const log = document.getElementById('eventLog');
+            log.innerHTML = '<div class="event-item"><span class="event-type">INFO</span><span>Log cleared</span></div>';
+        };
+
+        // Monitor tracker queue
+        setInterval(() => {
+            updateStats();
+        }, 1000);
+
+        // Log initial page view
+        logEvent('PAGEVIEW', `Page loaded: ${window.location.pathname}`);
+        pageviewCount++;
+
+        // Listen for page changes (SPA simulation)
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const path = link.getAttribute('href');
+                
+                // Simulate SPA navigation
+                window.history.pushState({}, '', path);
+                
+                pageviewCount++;
+                logEvent('PAGEVIEW', `Navigated to: ${path}`);
+                logEvent('INFO', 'Page change detected by tracker');
+            });
+        });
+
+        // Initial log
+        logEvent('INIT', '✅ WebTicks tracker initialized and active');
+        logEvent('INFO', `User ID: ${tracker.userId}`);
+    </script>
+</body>
+</html>

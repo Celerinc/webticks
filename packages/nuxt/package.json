@@ -1,0 +1,24 @@
+{
+    "name": "@webticks/nuxt",
+    "version": "0.0.1",
+    "description": "Nuxt integration for webticks",
+    "main": "dist/module.mjs",
+    "types": "dist/types.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/module.mjs",
+            "require": "./dist/module.cjs"
+        }
+    },
+    "scripts": {
+        "build": "nuxt-module-build"
+    },
+    "dependencies": {
+        "@webticks/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@nuxt/kit": "^3.0.0",
+        "@nuxt/module-builder": "^0.8.0"
+    }
+}
