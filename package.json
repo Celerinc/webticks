@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "url": "https://github.com/Celerinc/webticks"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "private": true
+  "license": "MPL-2.0"
 }
