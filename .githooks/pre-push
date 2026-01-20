@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Pre-push hook to replace workspace:* dependencies with actual versions
+# This ensures that package.json files have real version numbers before pushing
+
+echo "Checking for workspace:* dependencies..."
+
+# Get the current version from root package.json
+VERSION=$(node -p "require('./package.json').version" 2>/dev/null)
+
+if [ -z "$VERSION" ]; then
+  echo "Error: Could not read version from package.json"
+  exit 1
+fi
+
+# Check if any package.json files have workspace:* dependencies
+WORKSPACE_DEPS=$(find packages -name "package.json" -exec grep -l "\"workspace:\*\"" {} \; 2>/dev/null)
+
+if [ -n "$WORKSPACE_DEPS" ]; then
+  echo "Found workspace:* dependencies. Replacing with ^$VERSION..."
+  
+  # Replace workspace:* with actual version
+  find packages -name "package.json" -exec sed -i '' "s/\"workspace:\*\"/\"^$VERSION\"/g" {} \;
+  
+  # Stage the modified files
+  git add packages/*/package.json
+  
+  echo "Replaced workspace:* with ^$VERSION in:"
+  echo "$WORKSPACE_DEPS"
+  echo ""
+  echo "Files have been staged. Please commit these changes before pushing:"
+  echo "   git commit -m 'chore: replace workspace dependencies with version $VERSION'"
+  echo ""
+  exit 1
+else
+  echo "No workspace:* dependencies found. Safe to push!"
+fi
+
+exit 0
