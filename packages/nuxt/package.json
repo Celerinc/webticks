@@ -15,7 +15,7 @@
         "build": "nuxt-module-build"
     },
     "dependencies": {
-        "@webticks/core": "workspace:*"
+        "@webticks/core": "^0.0.1"
     },
     "devDependencies": {
         "@nuxt/kit": "^3.0.0",

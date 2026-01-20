@@ -8,6 +8,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/core": "workspace:*"
+    "@webticks/core": "^0.0.1"
   }
 }

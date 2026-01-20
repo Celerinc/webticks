@@ -8,7 +8,7 @@
         "build": "ngc"
     },
     "dependencies": {
-        "@webticks/core": "workspace:*"
+        "@webticks/core": "^0.0.1"
     },
     "peerDependencies": {
         "@angular/core": "^19.0.0",
