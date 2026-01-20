@@ -1,6 +1,6 @@
 {
     "name": "@webticks/node",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "WebTicks Node.js server-side tracking",
     "main": "src/index.js",

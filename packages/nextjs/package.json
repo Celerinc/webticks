@@ -1,6 +1,6 @@
 {
   "name": "@webticks/next",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "peerDependencies": {
     "react": ">=16.8.0"
   },

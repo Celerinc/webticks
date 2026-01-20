@@ -1,6 +1,6 @@
 {
     "name": "@webticks/sveltekit",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "SvelteKit integration for webticks",
     "type": "module",
     "svelte": "./src/index.js",

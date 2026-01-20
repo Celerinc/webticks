@@ -1,6 +1,6 @@
 {
   "name": "@webticks/react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.jsx",
   "module": "index.jsx",
   "type": "module",
