@@ -1,13 +1,31 @@
 {
   "name": "@webticks/react",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "React integration for WebTicks analytics",
   "main": "index.jsx",
   "module": "index.jsx",
   "type": "module",
+  "keywords": [
+    "analytics",
+    "tracking",
+    "react",
+    "webticks"
+  ],
+  "author": "Celerinc Team",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Celerinc/webticks.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/Celerinc/webticks#readme",
+  "bugs": {
+    "url": "https://github.com/Celerinc/webticks/issues"
+  },
   "peerDependencies": {
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/core": "^0.0.1"
+    "@webticks/core": "^0.1.0"
   }
 }

@@ -1,10 +1,29 @@
 {
   "name": "@webticks/next",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Next.js integration for WebTicks analytics",
+  "keywords": [
+    "analytics",
+    "tracking",
+    "nextjs",
+    "react",
+    "webticks"
+  ],
+  "author": "Celerinc Team",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Celerinc/webticks.git",
+    "directory": "packages/nextjs"
+  },
+  "homepage": "https://github.com/Celerinc/webticks#readme",
+  "bugs": {
+    "url": "https://github.com/Celerinc/webticks/issues"
+  },
   "peerDependencies": {
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/react": "^0.0.1"
+    "@webticks/react": "^0.1.0"
   }
 }

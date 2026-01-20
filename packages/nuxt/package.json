@@ -1,7 +1,7 @@
 {
     "name": "@webticks/nuxt",
-    "version": "0.0.1",
-    "description": "Nuxt integration for webticks",
+    "version": "0.1.0",
+    "description": "Nuxt 3 integration for WebTicks analytics",
     "main": "dist/module.mjs",
     "types": "dist/types.d.ts",
     "exports": {
@@ -14,8 +14,27 @@
     "scripts": {
         "build": "nuxt-module-build"
     },
+    "keywords": [
+        "analytics",
+        "tracking",
+        "nuxt",
+        "nuxt3",
+        "vue",
+        "webticks"
+    ],
+    "author": "Celerinc Team",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Celerinc/webticks.git",
+        "directory": "packages/nuxt"
+    },
+    "homepage": "https://github.com/Celerinc/webticks#readme",
+    "bugs": {
+        "url": "https://github.com/Celerinc/webticks/issues"
+    },
     "dependencies": {
-        "@webticks/core": "^0.0.1"
+        "@webticks/core": "^0.1.0"
     },
     "devDependencies": {
         "@nuxt/kit": "^3.0.0",

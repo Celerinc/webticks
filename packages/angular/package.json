@@ -1,14 +1,31 @@
 {
     "name": "@webticks/angular",
-    "version": "0.0.1",
-    "description": "Angular integration for webticks",
+    "version": "0.1.0",
+    "description": "Angular integration for WebTicks analytics",
     "main": "dist/public-api.js",
     "types": "dist/public-api.d.ts",
     "scripts": {
         "build": "ngc"
     },
+    "keywords": [
+        "analytics",
+        "tracking",
+        "angular",
+        "webticks"
+    ],
+    "author": "Celerinc Team",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Celerinc/webticks.git",
+        "directory": "packages/angular"
+    },
+    "homepage": "https://github.com/Celerinc/webticks#readme",
+    "bugs": {
+        "url": "https://github.com/Celerinc/webticks/issues"
+    },
     "dependencies": {
-        "@webticks/core": "^0.0.1"
+        "@webticks/core": "^0.1.0"
     },
     "peerDependencies": {
         "@angular/core": "^19.0.0",

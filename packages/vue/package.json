@@ -1,11 +1,29 @@
 {
     "name": "@webticks/vue",
-    "version": "0.0.1",
-    "description": "Vue integration for webticks",
+    "version": "0.1.0",
+    "description": "Vue 3 integration for WebTicks analytics",
     "main": "src/index.js",
     "module": "src/index.js",
+    "keywords": [
+        "analytics",
+        "tracking",
+        "vue",
+        "vue3",
+        "webticks"
+    ],
+    "author": "Celerinc Team",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Celerinc/webticks.git",
+        "directory": "packages/vue"
+    },
+    "homepage": "https://github.com/Celerinc/webticks#readme",
+    "bugs": {
+        "url": "https://github.com/Celerinc/webticks/issues"
+    },
     "dependencies": {
-        "@webticks/core": "^0.0.1"
+        "@webticks/core": "^0.1.0"
     },
     "peerDependencies": {
         "vue": "^3.0.0"

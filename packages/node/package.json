@@ -1,14 +1,31 @@
 {
     "name": "@webticks/node",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "description": "Node.js server-side tracking for WebTicks analytics",
     "type": "module",
-    "description": "WebTicks Node.js server-side tracking",
     "main": "src/index.js",
     "files": [
         "src/"
     ],
-    "dependencies": {
-        "@webticks/core": "^0.0.1"
+    "keywords": [
+        "analytics",
+        "tracking",
+        "nodejs",
+        "server-side",
+        "webticks"
+    ],
+    "author": "Celerinc Team",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Celerinc/webticks.git",
+        "directory": "packages/node"
     },
-    "license": "ISC"
+    "homepage": "https://github.com/Celerinc/webticks#readme",
+    "bugs": {
+        "url": "https://github.com/Celerinc/webticks/issues"
+    },
+    "dependencies": {
+        "@webticks/core": "^0.1.0"
+    }
 }

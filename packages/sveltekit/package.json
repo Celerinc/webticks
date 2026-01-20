@@ -1,7 +1,7 @@
 {
     "name": "@webticks/sveltekit",
-    "version": "0.0.1",
-    "description": "SvelteKit integration for webticks",
+    "version": "0.1.0",
+    "description": "SvelteKit integration for WebTicks analytics",
     "type": "module",
     "svelte": "./src/index.js",
     "exports": {
@@ -9,10 +9,28 @@
             "svelte": "./src/index.js"
         }
     },
+    "keywords": [
+        "analytics",
+        "tracking",
+        "svelte",
+        "sveltekit",
+        "webticks"
+    ],
+    "author": "Celerinc Team",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Celerinc/webticks.git",
+        "directory": "packages/sveltekit"
+    },
+    "homepage": "https://github.com/Celerinc/webticks#readme",
+    "bugs": {
+        "url": "https://github.com/Celerinc/webticks/issues"
+    },
     "peerDependencies": {
         "svelte": "^4.0.0 || ^5.0.0"
     },
     "dependencies": {
-        "@webticks/core": "^0.0.1"
+        "@webticks/core": "^0.1.0"
     }
 }
