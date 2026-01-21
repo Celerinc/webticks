@@ -1,8 +1,7 @@
 name: Publish to npm
 
-# Trigger options - choose one or combine:
+
 on:
-  # Option 1: Manual trigger via GitHub UI
   workflow_dispatch:
     inputs:
       publish-all:
@@ -11,14 +10,8 @@ on:
         type: boolean
         default: true
   
-  # Option 2: Automatic on release creation
   release:
     types: [created]
-  
-  # Option 3: Automatic on version tag push (uncomment if needed)
-  # push:
-  #   tags:
-  #     - 'v*.*.*'
 
 jobs:
   publish:
@@ -26,7 +19,7 @@ jobs:
     
     permissions:
       contents: read
-      id-token: write # Required for npm provenance
+      id-token: write
     
     steps:
       - name: Checkout code
@@ -48,14 +41,12 @@ jobs:
       
       - name: Build packages (if needed)
         run: |
-          # Build Angular package
           cd packages/angular
           if [ -f "package.json" ] && grep -q "\"build\"" package.json; then
             pnpm build
           fi
           cd ../..
           
-          # Build Nuxt package
           cd packages/nuxt
           if [ -f "package.json" ] && grep -q "\"build\"" package.json; then
             pnpm build
@@ -65,62 +56,46 @@ jobs:
       - name: Publish @webticks/core
         run: |
           cd packages/core
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/node
         run: |
           cd packages/node
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/react
         run: |
           cd packages/react
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/angular
         run: |
           cd packages/angular
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/vue
         run: |
           cd packages/vue
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/next
         run: |
           cd packages/nextjs
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/sveltekit
         run: |
           cd packages/sveltekit
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Publish @webticks/nuxt
         run: |
           cd packages/nuxt
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
       
       - name: Summary
         run: |
-          echo "✅ All packages published successfully!"
+          echo "All packages published successfully!"
           echo "Published packages:"
           echo "- @webticks/core@$(node -p "require('./packages/core/package.json').version")"
           echo "- @webticks/node@$(node -p "require('./packages/node/package.json').version")"
