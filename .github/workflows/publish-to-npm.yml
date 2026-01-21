@@ -62,47 +62,103 @@ jobs:
       - name: Publish @webticks/core
         run: |
           cd packages/core
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/core version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/core@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/core@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/node
         run: |
           cd packages/node
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/node version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/node@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/node@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/react
         run: |
           cd packages/react
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/react version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/react@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/react@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/angular
         run: |
           cd packages/angular
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/angular version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/angular@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/angular@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/vue
         run: |
           cd packages/vue
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/vue version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/vue@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/vue@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/next
         run: |
           cd packages/nextjs
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/next version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/next@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/next@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/sveltekit
         run: |
           cd packages/sveltekit
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/sveltekit version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/sveltekit@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/sveltekit@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Publish @webticks/nuxt
         run: |
           cd packages/nuxt
-          npm publish --provenance --access public
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          REMOTE_VERSION=$(npm view @webticks/nuxt version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "Publishing @webticks/nuxt@$LOCAL_VERSION (remote: $REMOTE_VERSION)"
+            npm publish --provenance --access public
+          else
+            echo "Skipping @webticks/nuxt@$LOCAL_VERSION (already published)"
+          fi
       
       - name: Summary
         run: |
-          echo "All packages published successfully!"
-          echo "Published packages:"
+          echo "Publish workflow completed!"
+          echo "Package versions:"
           echo "- @webticks/core@$(node -p "require('./packages/core/package.json').version")"
           echo "- @webticks/node@$(node -p "require('./packages/node/package.json').version")"
           echo "- @webticks/react@$(node -p "require('./packages/react/package.json').version")"
