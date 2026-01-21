@@ -4,6 +4,9 @@
     "description": "Nuxt 3 integration for WebTicks analytics",
     "main": "dist/module.mjs",
     "types": "dist/types.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
     "exports": {
         ".": {
             "types": "./dist/types.d.ts",

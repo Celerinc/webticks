@@ -3,6 +3,9 @@
     "version": "0.1.1",
     "description": "SvelteKit integration for WebTicks analytics",
     "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
     "svelte": "./src/index.js",
     "exports": {
         ".": {

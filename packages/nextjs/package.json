@@ -2,6 +2,9 @@
   "name": "@webticks/next",
   "version": "0.1.1",
   "description": "Next.js integration for WebTicks analytics",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "analytics",
     "tracking",

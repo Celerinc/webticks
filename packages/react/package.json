@@ -5,6 +5,9 @@
   "main": "index.jsx",
   "module": "index.jsx",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "analytics",
     "tracking",

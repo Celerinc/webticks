@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "description": "Lightweight analytics library for modern web applications with seamless event tracking and page view monitoring",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "injector.js",
   "module": "injector.js",
   "exports": {

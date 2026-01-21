@@ -4,6 +4,9 @@
     "description": "Vue 3 integration for WebTicks analytics",
     "main": "src/index.js",
     "module": "src/index.js",
+    "publishConfig": {
+        "access": "public"
+    },
     "keywords": [
         "analytics",
         "tracking",
