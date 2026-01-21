@@ -62,7 +62,6 @@ jobs:
         run: |
           rm -f .npmrc
           npm config set @webticks:registry https://registry.npmjs.org/
-          npm config set //registry.npmjs.org/:always-auth false
 
       - name: Publish @webticks/core
         run: |
