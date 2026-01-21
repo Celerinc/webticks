@@ -30,7 +30,7 @@ import { AnalyticsTracker } from '@webticks/core/tracker';
 
 const tracker = new AnalyticsTracker({
   backendUrl: "https://your-api.com/api/track",
-  appId: "your-application-id"
+  appId: "your-application-id" // Generated from the webticks API
 });
 ```
 
@@ -40,7 +40,7 @@ import { createServerTracker } from '@webticks/node';
 
 const tracker = createServerTracker({
   backendUrl: "https://your-api.com/api/track",
-  appId: "your-application-id"
+  appId: "your-application-id" // Generated from the webticks API
 });
 ```
 
