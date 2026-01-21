@@ -58,10 +58,6 @@ jobs:
           fi
           cd ../..
       
-      - name: Configure npm for Trusted Publishing
-        run: |
-          rm -f .npmrc
-          npm config set @webticks:registry https://registry.npmjs.org/
 
       - name: Publish @webticks/core
         run: |
