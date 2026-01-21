@@ -16,7 +16,8 @@ const PORT = 3001;
 
 // Create tracker instance
 const tracker = createServerTracker({
-    backendUrl: 'https://api.example.com/track'
+    backendUrl: 'http://localhost:3002/api/track',
+    appId: '97069816-8b25-4640-833f-f17259208a42'
 });
 
 // Middleware

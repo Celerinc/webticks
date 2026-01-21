@@ -2,10 +2,10 @@
 import inject from '@webticks/core';
 import { useEffect } from 'react';
 
-function WebticksAnalytics() {
+function WebticksAnalytics({ backendUrl, appId }) {
     useEffect(() => {
-        inject();
-    }, []);
+        inject({ backendUrl, appId });
+    }, [backendUrl, appId]);
     return null;
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import inject from '@webticks/core';
 
 @Component({
@@ -7,7 +7,13 @@ import inject from '@webticks/core';
     standalone: true
 })
 export class WebticksAnalytics implements OnInit {
+    backendUrl = input<string>();
+    appId = input<string>();
+
     ngOnInit() {
-        inject();
+        inject({
+            backendUrl: this.backendUrl(),
+            appId: this.appId()
+        });
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "@webticks/angular",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Angular integration for WebTicks analytics",
     "main": "dist/public-api.js",
     "types": "dist/public-api.d.ts",
@@ -25,7 +25,7 @@
         "url": "https://github.com/Celerinc/webticks/issues"
     },
     "dependencies": {
-        "@webticks/core": "^0.1.0"
+        "@webticks/core": "^0.1.1"
     },
     "peerDependencies": {
         "@angular/core": "^19.0.0",

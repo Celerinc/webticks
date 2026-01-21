@@ -229,7 +229,10 @@ function App() {
 
   return (
     <>
-      <WebticksAnalytics />
+      <WebticksAnalytics
+        backendUrl="http://localhost:3002/api/track"
+        appId="97069816-8b25-4640-833f-f17259208a42"
+      />
 
       <div className="pomodoro-container">
         <h1>🍅 Pomodoro Timer</h1>

@@ -1,6 +1,6 @@
 {
   "name": "@webticks/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React integration for WebTicks analytics",
   "main": "index.jsx",
   "module": "index.jsx",
@@ -26,6 +26,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/core": "^0.1.0"
+    "@webticks/core": "^0.1.1"
   }
 }

@@ -9,5 +9,8 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<WebticksAnalytics />
+<WebticksAnalytics
+	backendUrl="http://localhost:3002/api/track"
+	appId="97069816-8b25-4640-833f-f17259208a42"
+/>
 {@render children()}

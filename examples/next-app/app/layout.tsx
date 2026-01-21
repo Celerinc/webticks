@@ -28,7 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WebticksAnalytics />
+        <WebticksAnalytics
+          backendUrl="http://localhost:3002/api/track"
+          appId="97069816-8b25-4640-833f-f17259208a42"
+        />
         {children}
       </body>
     </html>

@@ -1,98 +1,62 @@
-# WebTicks Core - Usage Examples
+# @webticks/core
 
-## Browser Usage (No Changes Required!)
+Lightweight analytics library for modern web applications.
 
-Your existing React/Next.js packages continue to work exactly as before:
+## Installation
 
-```jsx
-import WebTicksAnalytics from '@webticks/react';
-
-function App() {
-  return (
-    <div>
-      <WebTicksAnalytics />
-      {/* Your app */}
-    </div>
-  );
-}
+```bash
+npm install @webticks/core
 ```
 
-## Server-Side Usage
-
-### Option 1: Express Middleware (Automatic)
+## Quick Start
 
 ```javascript
-import express from 'express';
-import { createServerMiddleware } from '@webticks/core/server';
+import inject from '@webticks/core';
 
-const app = express();
-
-// Automatically track all HTTP requests
-app.use(createServerMiddleware({
-  backendUrl: 'https://api.example.com/track'
-}));
-
-app.listen(3000);
+// Initialize analytics with explicit config
+inject({
+  backendUrl: 'https://your-api.com/track',
+  appId: 'your-app-id'
+});
 ```
 
-### Option 2: Manual Tracking
+## Best Practices: Environment Variables
+
+For security and flexibility, it is **highly recommended** to source your configuration from environment variables rather than hardcoding them in your source code.
 
 ```javascript
-import { AnalyticsTracker } from '@webticks/core/tracker';
-
-const tracker = new AnalyticsTracker({
-  backendUrl: 'https://api.example.com/track'
+// Example using Vite or other modern bundlers
+inject({
+  backendUrl: import.meta.env.VITE_WEBTICKS_BACKEND_URL,
+  appId: import.meta.env.VITE_WEBTICKS_APP_ID
 });
 
-// Track server requests
-tracker.trackServerRequest({
-  method: 'GET',
-  path: '/api/users',
-  query: { page: 1 },
-  headers: { 'user-agent': 'Mozilla/5.0' }
+// Example using Node.js / Webpack
+inject({
+  backendUrl: process.env.WEBTICKS_BACKEND_URL,
+  appId: process.env.WEBTICKS_APP_ID
 });
-
-// Track custom events
-tracker.trackEvent('database_query', {
-  table: 'users',
-  duration: 45
-});
-
-// Send immediately (useful for serverless)
-await tracker.sendQueue();
 ```
 
-### Next.js Example
+## Exports
 
-```javascript
-// pages/api/users.js
-import { AnalyticsTracker } from '@webticks/core/tracker';
+| Export | Description |
+|--------|-------------|
+| `@webticks/core` | Injector function (default) |
+| `@webticks/core/tracker` | `AnalyticsTracker` class for manual tracking |
 
-const tracker = new AnalyticsTracker({
-  backendUrl: process.env.ANALYTICS_URL
-});
+## API
 
-export default async function handler(req, res) {
-  tracker.trackServerRequest({
-    method: req.method,
-    path: req.url,
-    query: req.query,
-    headers: {
-      'user-agent': req.headers['user-agent']
-    }
-  });
+### `inject(config)`
 
-  // Your API logic here
-  const data = await getUsers();
-  
-  res.status(200).json(data);
-}
-```
+| Option | Type | Description |
+|--------|------|-------------|
+| `backendUrl` | `string` | Recommended. URL to send analytics data to. Defaults to `/api/track`. |
+| `appId` | `string` | Required. Your application ID. |
 
-## Key Benefits
+> [!NOTE]
+> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
-✅ **Centralized Logic**: All tracking logic lives in `@webticks/core`  
-✅ **Environment Agnostic**: Works in browser and Node.js  
-✅ **Zero Breaking Changes**: Existing packages work without modifications  
-✅ **Easy Updates**: Fix bugs once, all environments benefit  
-✅ **Flexible**: Works with any framework (Express, Koa, Fastify, serverless, etc.)
+## License
+
+[MPL-2.0](https://github.com/Celerinc/webticks/blob/main/LICENSE)

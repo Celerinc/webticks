@@ -1,6 +1,6 @@
 {
     "name": "@webticks/nuxt",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Nuxt 3 integration for WebTicks analytics",
     "main": "dist/module.mjs",
     "types": "dist/types.d.ts",
@@ -34,7 +34,7 @@
         "url": "https://github.com/Celerinc/webticks/issues"
     },
     "dependencies": {
-        "@webticks/core": "^0.1.0"
+        "@webticks/core": "^0.1.1"
     },
     "devDependencies": {
         "@nuxt/kit": "^3.0.0",

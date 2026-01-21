@@ -1,6 +1,6 @@
 {
   "name": "@webticks/next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Next.js integration for WebTicks analytics",
   "keywords": [
     "analytics",
@@ -24,6 +24,6 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/react": "^0.1.0"
+    "@webticks/react": "^0.1.1"
   }
 }

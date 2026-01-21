@@ -1,6 +1,6 @@
 {
     "name": "@webticks/node",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Node.js server-side tracking for WebTicks analytics",
     "type": "module",
     "main": "src/index.js",
@@ -26,6 +26,6 @@
         "url": "https://github.com/Celerinc/webticks/issues"
     },
     "dependencies": {
-        "@webticks/core": "^0.1.0"
+        "@webticks/core": "^0.1.1"
     }
 }
