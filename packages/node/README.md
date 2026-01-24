@@ -1,5 +1,10 @@
 # @webticks/node
 
+[![npm version](https://img.shields.io/npm/v/@webticks/node.svg)](https://www.npmjs.com/package/@webticks/node)
+[![license](https://img.shields.io/npm/l/@webticks/node.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/node)](https://bundlephobia.com/package/@webticks/node)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+
 Node.js server-side tracking for WebTicks analytics.
 
 ## Installation
@@ -18,12 +23,8 @@ const tracker = createServerTracker({
   appId: 'your-app-id'
 });
 
-// Track a server request
-tracker.trackServerRequest({
-  method: 'GET',
-  path: '/api/users',
-  headers: { 'user-agent': req.headers['user-agent'] }
-});
+// Use middleware for automatic request tracking (recommended)
+app.use(tracker.middleware());
 ```
 
 ## Best Practices: Environment Variables
@@ -37,7 +38,9 @@ const tracker = createServerTracker({
 });
 ```
 
-## Express Middleware Example
+## Express Middleware Integration
+
+The `tracker.middleware()` helper automatically captures request details (method, path, headers) and batches them for efficient delivery to your WebTicks API.
 
 ```javascript
 import express from 'express';
@@ -49,14 +52,31 @@ const tracker = createServerTracker({
   appId: process.env.WEBTICKS_APP_ID
 });
 
-app.use((req, res, next) => {
-  tracker.trackServerRequest({
-    method: req.method,
-    path: req.url,
-    headers: { 'user-agent': req.headers['user-agent'] }
-  });
-  next();
+// Captures all requests automatically
+app.use(tracker.middleware());
+```
+
+## Custom Events + Auto-Tracking
+
+By default, both your custom event AND the server_request are tracked. This gives you complete analytics:
+
+```javascript
+app.post('/api/checkout', (req, res) => {
+  tracker.trackEvent('checkout_completed', { total: 99.99 });
+  // Both 'checkout_completed' AND 'server_request' are recorded
+  res.json({ success: true });
 });
+```
+
+### Controlling Auto-Tracking
+
+By default, both your custom event AND the server_request are tracked.
+
+To skip auto-tracking (only record your custom event), use `isAutoTracked: true`:
+
+```javascript
+// Only custom event (auto-tracking skipped)
+tracker.trackEvent('checkout', { total: 99.99 }, { isAutoTracked: true, req });
 ```
 
 ## API

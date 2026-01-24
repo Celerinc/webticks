@@ -1,5 +1,10 @@
 # @webticks/react
 
+[![npm version](https://img.shields.io/npm/v/@webticks/react.svg)](https://www.npmjs.com/package/@webticks/react)
+[![license](https://img.shields.io/npm/l/@webticks/react.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/react)](https://bundlephobia.com/package/@webticks/react)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
+
 React integration for WebTicks analytics.
 
 ## Installation

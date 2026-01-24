@@ -1,5 +1,10 @@
 # @webticks/nuxt
 
+[![npm version](https://img.shields.io/npm/v/@webticks/nuxt.svg)](https://www.npmjs.com/package/@webticks/nuxt)
+[![license](https://img.shields.io/npm/l/@webticks/nuxt.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/nuxt)](https://bundlephobia.com/package/@webticks/nuxt)
+![Nuxt.js](https://img.shields.io/badge/Nuxt.js-00DC82?logo=nuxtdotjs&logoColor=white)
+
 Nuxt 3 module for WebTicks analytics.
 
 ## Installation

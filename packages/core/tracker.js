@@ -1,4 +1,4 @@
-import { getPlatformAdapter, isServer, isBrowser } from './platform-adapters.js';
+import { getPlatformAdapter, isServer, isBrowser } from './adapters.js';
 
 // Import type definitions
 /**

@@ -3,7 +3,9 @@
  * This extends the core tracker with Node.js-specific functionality
  */
 
-import { isServer } from '@webticks/core/platform-adapters';
+function isServer() {
+    return typeof window === 'undefined';
+}
 
 export class NodeAdapter {
     constructor() {
@@ -69,10 +71,10 @@ export class NodeAdapter {
     }
 
     setupAutoTracking(tracker) {
-        console.log('Server-side tracking: Call tracker.trackServerRequest() in your request handler');
+        console.log('Server-side tracking: Use tracker.middleware() or call tracker.trackServerRequest() in your request handler');
     }
 
     cleanupAutoTracking(tracker) {
-        // Nothing to clean up
+        // Nothing to clean up on server
     }
 }

@@ -1,5 +1,10 @@
 # @webticks/angular
 
+[![npm version](https://img.shields.io/npm/v/@webticks/angular.svg)](https://www.npmjs.com/package/@webticks/angular)
+[![license](https://img.shields.io/npm/l/@webticks/angular.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/angular)](https://bundlephobia.com/package/@webticks/angular)
+![Angular](https://img.shields.io/badge/Angular-DD0031?logo=angular&logoColor=white)
+
 Angular integration for WebTicks analytics.
 
 ## Installation

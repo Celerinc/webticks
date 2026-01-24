@@ -1,5 +1,10 @@
 # @webticks/vue
 
+[![npm version](https://img.shields.io/npm/v/@webticks/vue.svg)](https://www.npmjs.com/package/@webticks/vue)
+[![license](https://img.shields.io/npm/l/@webticks/vue.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/vue)](https://bundlephobia.com/package/@webticks/vue)
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?logo=vuedotjs&logoColor=white)
+
 Vue 3 integration for WebTicks analytics.
 
 ## Installation

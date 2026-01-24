@@ -123,3 +123,6 @@ temp/
 
 # Scripts
 scripts/
+
+# Agent configuration
+.agent/

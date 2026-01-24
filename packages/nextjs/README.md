@@ -1,5 +1,10 @@
 # @webticks/next
 
+[![npm version](https://img.shields.io/npm/v/@webticks/next.svg)](https://www.npmjs.com/package/@webticks/next)
+[![license](https://img.shields.io/npm/l/@webticks/next.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/next)](https://bundlephobia.com/package/@webticks/next)
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)
+
 Next.js integration for WebTicks analytics.
 
 ## Installation

@@ -1,14 +1,36 @@
-# Node.js/Express Server with WebTicks Analytics
+# Node.js/Express Backend API with WebTicks Analytics
 
-This example demonstrates how to integrate WebTicks analytics into a Node.js/Express server using the `@webticks/node` package for server-side request tracking.
+This example demonstrates how to integrate WebTicks analytics into a Node.js/Express backend API using the `@webticks/node` package. This is a **client application** that uses `@webticks/node` to track server-side requests and send them to the WebTicks API for storage and analysis.
+
+## Architecture
+
+```
+┌─────────────────────┐
+│  Your Node.js App   │  ← This example
+│  (Port 3001)        │
+│                     │
+│  Uses:              │
+│  @webticks/node     │
+└──────────┬──────────┘
+           │
+           │ Sends tracked events
+           ▼
+┌─────────────────────┐
+│  WebTicks API       │  ← Separate service
+│  (Port 3002)        │     (webticks-api repo)
+│                     │
+│  Stores analytics   │
+│  data               │
+└─────────────────────┘
+```
 
 ## Features
 
-- Server-side HTTP request tracking
-- Session and user ID management
-- Event batching to minimize backend calls
-- Express middleware integration
-- Analytics dashboard endpoint
+- **Pure Backend API** - No frontend code, just REST endpoints
+- **Automatic Request Tracking** - All API requests tracked via middleware
+- **Sends to WebTicks API** - Events are sent to your WebTicks API instance
+- **Session Management** - User ID and session tracking handled automatically
+- **Event Batching** - Minimizes network calls for efficiency
 
 ## Installation
 
@@ -19,106 +41,163 @@ cd examples/node-app
 pnpm install
 ```
 
-## Environment Variables
+## Prerequisites
 
-No environment variables are required for development. For production, create a `.env` file:
-
-```env
-PORT=3000
-WEBTICKS_BACKEND_URL=https://your-analytics-backend.com/api/track
-```
+You need a running WebTicks API instance to receive the tracked events. See the [webticks-api](https://github.com/Celerinc/webticks-api) repository for setup instructions.
 
 ## Running the Application
 
 Start the server:
 ```bash
-pnpm start
+node demo-server.js
 ```
 
-Or use with nodemon for development:
-```bash
-pnpm dev
-```
-
-The server will be available at `http://localhost:3000`
+The server will be available at `http://localhost:3001`
 
 ## Usage
 
-The WebTicks tracker is integrated as Express middleware in `demo-server.js`:
+### Option 1: Auto-Track All Requests
+
+The simplest approach - automatically track every HTTP request:
 
 ```javascript
 import express from 'express';
 import { createServerTracker } from '@webticks/node';
 
 const app = express();
+
 const tracker = createServerTracker({
-  backendUrl: 'http://localhost:3000/api/track'
+  backendUrl: 'http://localhost:3002/api/track',
+  appId: 'your-app-id'
 });
 
-// Track all requests
-app.use((req, res, next) => {
-  tracker.trackServerRequest({
-    method: req.method,
-    path: req.url,
-    headers: req.headers
-  });
-  next();
+// One-line middleware - tracks ALL requests
+app.use(tracker.middleware());
+
+// All endpoints are automatically tracked
+app.get('/api/users', (req, res) => {
+  res.json({ users: [...] });
+});
+
+app.post('/api/orders', (req, res) => {
+  res.json({ success: true });
 });
 ```
 
-Every HTTP request to your server will be automatically tracked and batched for efficient analytics.
+Every request is tracked as a `server_request` event.
+
+### Option 2: Auto-Track + Custom Events
+
+Track both the server request AND custom business events. By default, both are recorded:
+
+```javascript
+import express from 'express';
+import { createServerTracker } from '@webticks/node';
+
+const app = express();
+
+const tracker = createServerTracker({
+  backendUrl: 'http://localhost:3002/api/track',
+  appId: 'your-app-id'
+});
+
+app.use(tracker.middleware());
+
+// Regular endpoint - auto-tracked as server_request
+app.get('/api/users', (req, res) => {
+  res.json({ users: [...] });
+});
+
+// Custom event endpoint - BOTH events are tracked:
+// 1. server_request (from middleware)
+// 2. checkout_completed (from trackEvent)
+app.post('/api/checkout', (req, res) => {
+  tracker.trackEvent('checkout_completed', {
+    userId: req.body.userId,
+    total: req.body.total
+  });
+  res.json({ success: true });
+});
+```
+
+### Controlling Auto-Tracking
+
+By default, calling `trackEvent()` does NOT skip auto-tracking - both events are recorded.
+
+To skip auto-tracking (only record your custom event), use `isAutoTracked: true`:
+
+```javascript
+app.post('/api/checkout', (req, res) => {
+  // Only 'checkout_completed' is tracked (auto-tracking skipped)
+  tracker.trackEvent('checkout_completed', { total: req.body.total }, { 
+    isAutoTracked: true,  // "I'm handling tracking, skip auto-track"
+    req 
+  });
+  res.json({ success: true });
+});
+```
+
+Without the flag, both events are tracked:
+
+```javascript
+app.post('/api/checkout', (req, res) => {
+  // Both 'checkout_completed' AND 'server_request' are tracked
+  tracker.trackEvent('checkout_completed', { total: req.body.total });
+  res.json({ success: true });
+});
+```
 
 ## API Endpoints
 
-The demo server includes:
+The demo server includes example endpoints:
 
-- `GET /` - Welcome page
-- `GET /api/users` - Sample API endpoint (tracked)
-- `POST /api/users` - Sample POST endpoint (tracked)
-- `POST /api/track` - Analytics receiver endpoint
-- `GET /api/events` - View all tracked events
+- `GET /health` - Health check endpoint
+- `GET /api/users` - List users
+- `POST /api/users` - Create a new user
+- `GET /api/products` - List products
+- `GET /api/orders` - List orders
+
+All of these endpoints are automatically tracked when accessed.
 
 ## Testing
 
 Test the tracking with curl:
 
 ```bash
-# Make requests that will be tracked
-curl http://localhost:3000/api/users
+# Health check
+curl http://localhost:3001/health
 
-# Create a user
-curl -X POST http://localhost:3000/api/users \
+# List users (tracked)
+curl http://localhost:3001/api/users
+
+# Create a user (tracked)
+curl -X POST http://localhost:3001/api/users \
   -H "Content-Type: application/json" \
   -d '{"name":"John Doe","email":"john@example.com"}'
 
-# View tracked events
-curl http://localhost:3000/api/events
+# List products (tracked)
+curl http://localhost:3001/api/products
 ```
 
-## Server Console Output
+Each request will be tracked and sent to your WebTicks API at `http://localhost:3002/api/track`.
 
-The server logs all tracked events:
+## Configuration
 
-```
-📊 Analytics Batch Received
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-User ID: abc123...
-Session ID: xyz789...
-Events Count: 2
+Update the tracker configuration in `app.js`:
 
-Events:
-  1. [server_request] /api/users
-      Request ID: req_001
-  2. [server_request] /api/users
-      Request ID: req_002
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```javascript
+const tracker = createServerTracker({
+  backendUrl: process.env.WEBTICKS_API_URL || 'http://localhost:3002/api/track',
+  appId: process.env.WEBTICKS_APP_ID || 'your-app-id'
+});
 ```
 
 ## Project Structure
 
 ```
-├── demo-server.js    # Express server with WebTicks integration
-└── package.json      # Dependencies and scripts
+├── app.js            # Express server with WebTicks integration
+├── package.json      # Dependencies and scripts
+└── README.md         # This file
 ```
 
 ## Tech Stack
@@ -127,11 +206,21 @@ Events:
 - Express.js
 - @webticks/node
 
+## How It Works
+
+1. Your Node.js app receives HTTP requests
+2. The tracking middleware captures request details
+3. `@webticks/node` batches events for efficiency
+4. Events are sent to the WebTicks API endpoint
+5. The WebTicks API stores and processes the analytics data
+
 ## Next Steps
 
-- Configure your analytics backend URL
+- Set up the [WebTicks API](https://github.com/Celerinc/webticks-api) to receive events
+- Configure your production WebTicks API URL
 - Add custom event tracking for business logic
 - Filter sensitive routes from tracking
-- Implement authentication tracking
+- Implement user authentication tracking
+- Deploy both your app and WebTicks API to production
 
 For more information, see the [@webticks/node](../../packages/node) package documentation.

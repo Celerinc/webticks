@@ -1,5 +1,10 @@
 # @webticks/core
 
+[![npm version](https://img.shields.io/npm/v/@webticks/core.svg)](https://www.npmjs.com/package/@webticks/core)
+[![license](https://img.shields.io/npm/l/@webticks/core.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/core)](https://bundlephobia.com/package/@webticks/core)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+
 Lightweight analytics library for modern web applications.
 
 ## Installation

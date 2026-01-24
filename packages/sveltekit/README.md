@@ -1,5 +1,10 @@
 # @webticks/sveltekit
 
+[![npm version](https://img.shields.io/npm/v/@webticks/sveltekit.svg)](https://www.npmjs.com/package/@webticks/sveltekit)
+[![license](https://img.shields.io/npm/l/@webticks/sveltekit.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/sveltekit)](https://bundlephobia.com/package/@webticks/sveltekit)
+![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white)
+
 SvelteKit integration for WebTicks analytics.
 
 ## Installation

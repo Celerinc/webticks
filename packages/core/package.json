@@ -12,12 +12,12 @@
     ".": "./injector.js",
     "./inject": "./injector.js",
     "./tracker": "./tracker.js",
-    "./platform-adapters": "./platform-adapters.js"
+    "./adapters": "./adapters.js"
   },
   "files": [
     "tracker.js",
     "injector.js",
-    "platform-adapters.js",
+    "adapters.js",
     "types.js",
     "README.md"
   ],
