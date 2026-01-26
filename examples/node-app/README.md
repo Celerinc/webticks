@@ -67,7 +67,7 @@ import { createServerTracker } from '@webticks/node';
 const app = express();
 
 const tracker = createServerTracker({
-  backendUrl: 'http://localhost:3002/api/track',
+  serverUrl: 'http://localhost:3002/api/track',
   appId: 'your-app-id'
 });
 
@@ -97,7 +97,7 @@ import { createServerTracker } from '@webticks/node';
 const app = express();
 
 const tracker = createServerTracker({
-  backendUrl: 'http://localhost:3002/api/track',
+  serverUrl: 'http://localhost:3002/api/track',
   appId: 'your-app-id'
 });
 
@@ -187,7 +187,7 @@ Update the tracker configuration in `app.js`:
 
 ```javascript
 const tracker = createServerTracker({
-  backendUrl: process.env.WEBTICKS_API_URL || 'http://localhost:3002/api/track',
+  serverUrl: process.env.WEBTICKS_API_URL || 'http://localhost:3002/api/track',
   appId: process.env.WEBTICKS_APP_ID || 'your-app-id'
 });
 ```

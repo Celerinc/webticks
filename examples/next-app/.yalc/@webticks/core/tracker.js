@@ -1,4 +1,4 @@
-import { getPlatformAdapter, isServer, isBrowser } from './platform-adapters.js';
+import { getPlatformAdapter, isServer, isBrowser } from './adapters.js';
 
 // Import type definitions
 /**
@@ -11,15 +11,15 @@ import { getPlatformAdapter, isServer, isBrowser } from './platform-adapters.js'
 
 export class AnalyticsTracker {
   /**
+   * Create a new AnalyticsTracker instance
    * @param {Object} config - Tracker configuration
-   * @param {string} config.backendUrl - URL to send analytics data
+   * @param {string} config.serverUrl - URL to send analytics data
    * @param {string} [config.appId] - Application ID for tracking (can also be set via WEBTICKS_APP_ID env variable)
    */
-  constructor(config) {
-    this.config = config || { backendUrl: "/api/track" };
-
-    // Get appId from config or environment variable
-    this.appId = this.config.appId || this.getAppIdFromEnv();
+  constructor(config = {}) {
+    this.config = config;
+    this.serverUrl = config.serverUrl || "/api/track";
+    this.appId = config.appId || null;
 
     /** @type {Event[]} */
     this.eventQueue = [];
@@ -42,22 +42,6 @@ export class AnalyticsTracker {
     this.initializeSession();
 
     console.log(`AnalyticsTracker initialized in ${isServer() ? 'Node.js' : 'Browser'} environment.`);
-  }
-
-  /**
-   * Get app ID from environment variable
-   * Works in both browser (import.meta.env) and Node.js (process.env)
-   */
-  getAppIdFromEnv() {
-    // Browser environment (Vite, etc.)
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      return import.meta.env.VITE_WEBTICKS_APP_ID || import.meta.env.WEBTICKS_APP_ID;
-    }
-    // Node.js environment
-    if (typeof process !== 'undefined' && process.env) {
-      return process.env.WEBTICKS_APP_ID;
-    }
-    return null;
   }
 
   initializeUser() {
@@ -89,6 +73,7 @@ export class AnalyticsTracker {
 
   /**
    * Generate fallback ID if crypto.randomUUID is not available
+   * @returns {string} The generated UUID
    */
   generateFallbackId() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -217,6 +202,7 @@ export class AnalyticsTracker {
 
   /**
    * Send queued events to the backend
+   * @returns {Promise<void>}
    */
   async sendQueue() {
     if (this.eventQueue.length === 0) {
@@ -226,7 +212,7 @@ export class AnalyticsTracker {
     const eventsToSend = [...this.eventQueue];
 
     try {
-      const response = await this.adapter.sendRequest(this.config.backendUrl, {
+      const response = await this.adapter.sendRequest(this.serverUrl, {
         uid: this.userId,
         sessionId: this.sessionId,
         events: eventsToSend,

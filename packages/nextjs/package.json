@@ -2,6 +2,15 @@
   "name": "@webticks/next",
   "version": "0.1.1",
   "description": "Next.js integration for WebTicks analytics",
+  "main": "index.jsx",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.jsx",
+      "require": "./index.jsx"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },

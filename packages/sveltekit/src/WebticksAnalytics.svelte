@@ -1,12 +1,13 @@
 <script>
-  import { onMount } from 'svelte';
-  import inject from '@webticks/core';
+  import { onMount } from "svelte";
+  import inject from "@webticks/core";
 
-  export let backendUrl = undefined;
+  export let serverUrl = undefined;
   export let appId = undefined;
+  export let debug = undefined;
 
   onMount(() => {
-    inject({ backendUrl, appId });
+    inject({ serverUrl, appId, debug });
   });
 </script>
 

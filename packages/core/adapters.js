@@ -3,10 +3,18 @@
  */
 
 // Environment detection
+/**
+ * Check if running in a browser environment
+ * @returns {boolean} True if in browser
+ */
 export function isBrowser() {
     return typeof window !== 'undefined';
 }
 
+/**
+ * Check if running in a server environment
+ * @returns {boolean} True if in server (Node.js)
+ */
 export function isServer() {
     return typeof window === 'undefined';
 }
@@ -19,7 +27,10 @@ export class BrowserAdapter {
         this.storage = window.localStorage;
     }
 
-    // Generate or retrieve user ID
+    /**
+     * Generate or retrieve user ID from local storage
+     * @returns {string} The persistent user ID
+     */
     getUserId() {
         let userId = this.storage.getItem('webticks_uid');
         if (!userId) {
@@ -29,7 +40,13 @@ export class BrowserAdapter {
         return userId;
     }
 
-    // Send HTTP request
+    /**
+     * Send HTTP request using fetch API
+     * @param {string} url - Destination URL
+     * @param {Object} data - Payload data
+     * @param {string} [appId] - Application ID header
+     * @returns {Promise<Response>} Fetch response
+     */
     async sendRequest(url, data, appId) {
         const headers = { 'Content-Type': 'application/json' };
 
@@ -45,12 +62,18 @@ export class BrowserAdapter {
         }).catch((err) => console.warn('Error sending request:', err));
     }
 
-    // Get current path
+    /**
+     * Get current page URL
+     * @returns {string} Current URL
+     */
     getCurrentPath() {
         return window.location.href;
     }
 
-    // Setup auto-tracking (browser-specific)
+    /**
+     * Setup auto-tracking listeners (history API, visibility, etc.)
+     * @param {import('./tracker.js').AnalyticsTracker} tracker - Tracker instance
+     */
     setupAutoTracking(tracker) {
         // Patch history API
         tracker.originalPushState = window.history.pushState;
@@ -83,7 +106,10 @@ export class BrowserAdapter {
         tracker.trackPageView(tracker.lastPath);
     }
 
-    // Cleanup auto-tracking
+    /**
+     * Cleanup event listeners and restore history API
+     * @param {import('./tracker.js').AnalyticsTracker} tracker - Tracker instance
+     */
     cleanupAutoTracking(tracker) {
         if (tracker.originalPushState) {
             window.history.pushState = tracker.originalPushState;
@@ -101,6 +127,7 @@ export class BrowserAdapter {
  * Factory function to get the appropriate adapter
  * Core package only provides browser adapter
  * For Node.js, use @webticks/node package
+ * @returns {BrowserAdapter|null} Adapter instance or null if on server
  */
 export function getPlatformAdapter() {
     if (isBrowser()) {

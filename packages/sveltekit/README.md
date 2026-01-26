@@ -24,7 +24,7 @@ Add the component to your root layout with explicit configuration:
 </script>
 
 <WebticksAnalytics 
-  backendUrl="https://your-api.com/track" 
+  serverUrl="https://your-api.com/track" 
   appId="your-app-id" 
 />
 <slot />
@@ -41,7 +41,7 @@ For security and flexibility, it is **highly recommended** to source your config
 </script>
 
 <WebticksAnalytics 
-  backendUrl={PUBLIC_WEBTICKS_BACKEND_URL} 
+  serverUrl={PUBLIC_WEBTICKS_SERVER_URL} 
   appId={PUBLIC_WEBTICKS_APP_ID} 
 />
 ```
@@ -50,11 +50,12 @@ For security and flexibility, it is **highly recommended** to source your config
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `backendUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
+| `serverUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
 | `appId` | `string` | Required. Your application ID. |
+| `debug` | `boolean` | Optional. Enable console logging. Defaults to `false`. |
 
 > [!NOTE]
-> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
 ## License
 

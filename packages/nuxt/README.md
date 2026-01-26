@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       webticks: {
-        backendUrl: 'https://your-api.com/track',
+        serverUrl: 'https://your-api.com/track',
         appId: 'your-app-id'
       }
     }
@@ -42,9 +42,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       webticks: {
-        // These can be overridden by NUXT_PUBLIC_WEBTICKS_BACKEND_URL 
+        // These can be overridden by NUXT_PUBLIC_WEBTICKS_SERVER_URL 
         // and NUXT_PUBLIC_WEBTICKS_APP_ID env variables
-        backendUrl: '', 
+        serverUrl: '', // Add process.env variable here'' 
         appId: ''
       }
     }
@@ -56,11 +56,12 @@ export default defineNuxtConfig({
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `backendUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
+| `serverUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
 | `appId` | `string` | Required. Your application ID. |
+| `debug` | `boolean` | Optional. Enable console logging. Defaults to `false`. |
 
 > [!NOTE]
-> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
 ## License
 

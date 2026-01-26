@@ -1,5 +1,11 @@
 import { AnalyticsTracker } from "./tracker.js";
 
+/**
+ * Injects the WebTicks tracker into the global window object.
+ * @param {Object} config - Tracker configuration
+ * @param {string} config.serverUrl - URL to send analytics data
+ * @param {string} [config.appId] - Application ID for tracking
+ */
 export default function inject(config = {}) {
   // Only auto-inject in browser environments
   if (typeof window === 'undefined') {

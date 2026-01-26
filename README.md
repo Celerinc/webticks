@@ -126,7 +126,7 @@ You can configure WebTicks with the following options:
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `backendUrl` | `string` | The URL where the data should be sent. |
+| `serverUrl` | `string` | The URL where the data should be sent. |
 | `appId` | `string` | A unique ID for your application. |
 
 ### Cleanup

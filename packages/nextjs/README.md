@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
     <html>
       <body>
         <WebticksAnalytics 
-          backendUrl="https://your-api.com/track" 
+          serverUrl="https://your-api.com/track" 
           appId="your-app-id" 
         />
         {children}
@@ -46,7 +46,7 @@ In Next.js, make sure to prefix your variables with `NEXT_PUBLIC_` to make them 
 
 ```tsx
 <WebticksAnalytics 
-  backendUrl={process.env.NEXT_PUBLIC_WEBTICKS_BACKEND_URL} 
+  serverUrl={process.env.NEXT_PUBLIC_WEBTICKS_SERVER_URL} 
   appId={process.env.NEXT_PUBLIC_WEBTICKS_APP_ID} 
 />
 ```
@@ -55,11 +55,12 @@ In Next.js, make sure to prefix your variables with `NEXT_PUBLIC_` to make them 
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `backendUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
+| `serverUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
 | `appId` | `string` | Required. Your application ID. |
+| `debug` | `boolean` | Optional. Enable console logging. Defaults to `false`. |
 
 > [!NOTE]
-> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
 ## License
 

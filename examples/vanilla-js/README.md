@@ -29,10 +29,10 @@ Add the WebTicks injector script to your HTML:
 
 ```html
 <script type="module">
-  import { inject } from '../../packages/core/injector.js';
+  import inject from '@webticks/core';
   
   inject({
-    backendUrl: '/api/track',
+    serverUrl: '/api/track',
     debug: true
   });
   
@@ -175,7 +175,7 @@ The WebTicks injector accepts these options:
 
 ```javascript
 inject({
-  backendUrl: '/api/track',  // Your analytics endpoint
+  serverUrl: '/api/track',  // Your analytics endpoint
   debug: true                 // Enable console logging
 });
 ```

@@ -12,14 +12,14 @@ import { NodeAdapter } from './adapter.js';
  * Create a tracker instance for server-side tracking
  * 
  * @param {Object} config - Configuration options
- * @param {string} config.backendUrl - URL to send analytics data to
+ * @param {string} config.serverUrl - URL to send analytics data to
  * @returns {AnalyticsTracker} Tracker instance configured for Node.js
  * 
  * @example
  * import { createServerTracker } from '@webticks/node';
  * 
  * const tracker = createServerTracker({
- *   backendUrl: 'https://api.example.com/track'
+ *   serverUrl: 'https://api.example.com/track'
  * });
  * 
  * // Use the middleware helper (recommended):

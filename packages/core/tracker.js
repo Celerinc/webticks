@@ -11,14 +11,17 @@ import { getPlatformAdapter, isServer, isBrowser } from './adapters.js';
 
 export class AnalyticsTracker {
   /**
+   * Create a new AnalyticsTracker instance
    * @param {Object} config - Tracker configuration
-   * @param {string} config.backendUrl - URL to send analytics data
+   * @param {string} config.serverUrl - URL to send analytics data
    * @param {string} [config.appId] - Application ID for tracking (can also be set via WEBTICKS_APP_ID env variable)
+   * @param {boolean} [config.debug] - Enable debug logging
    */
   constructor(config = {}) {
     this.config = config;
-    this.backendUrl = config.backendUrl || "/api/track";
+    this.serverUrl = config.serverUrl || "/api/track";
     this.appId = config.appId || null;
+    this.debug = config.debug || false;
 
     /** @type {Event[]} */
     this.eventQueue = [];
@@ -40,7 +43,9 @@ export class AnalyticsTracker {
     this.initializeUser();
     this.initializeSession();
 
-    console.log(`AnalyticsTracker initialized in ${isServer() ? 'Node.js' : 'Browser'} environment.`);
+    if (this.debug) {
+      console.log(`AnalyticsTracker initialized in ${isServer() ? 'Node.js' : 'Browser'} environment.`);
+    }
   }
 
   initializeUser() {
@@ -62,16 +67,21 @@ export class AnalyticsTracker {
     // Generate new session ID using crypto (available in both browser and Node.js)
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
       this.sessionId = crypto.randomUUID();
-      console.log(`Session initialized: ${this.sessionId}`);
+      if (this.debug) {
+        console.log(`Session initialized: ${this.sessionId}`);
+      }
     } else {
       // Fallback for older environments
       this.sessionId = this.generateFallbackId();
-      console.warn('crypto.randomUUID not available, using fallback ID generation');
+      if (this.debug) {
+        console.warn('crypto.randomUUID not available, using fallback ID generation');
+      }
     }
   }
 
   /**
    * Generate fallback ID if crypto.randomUUID is not available
+   * @returns {string} The generated UUID
    */
   generateFallbackId() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -86,10 +96,12 @@ export class AnalyticsTracker {
    * Works in both environments!
    */
   autoTrackPageViews() {
-    if (isServer()) {
-      console.log("Setting up automatic server-side tracking...");
-    } else {
-      console.log("Setting up automatic page view tracking...");
+    if (this.debug) {
+      if (isServer()) {
+        console.log("Setting up automatic server-side tracking...");
+      } else {
+        console.log("Setting up automatic page view tracking...");
+      }
     }
 
     // Use adapter to setup platform-specific tracking
@@ -107,7 +119,9 @@ export class AnalyticsTracker {
 
     const currentPath = this.adapter.getCurrentPath();
     if (currentPath !== this.lastPath) {
-      console.log(`Page change detected: ${this.lastPath} -> ${currentPath}`);
+      if (this.debug) {
+        console.log(`Page change detected: ${this.lastPath} -> ${currentPath}`);
+      }
       this.lastPath = currentPath;
       this.trackPageView(currentPath);
     }
@@ -130,7 +144,9 @@ export class AnalyticsTracker {
    * Handle page hide event (browser-only)
    */
   handlePageHide() {
-    console.log("Page hidden, attempting final batch send.");
+    if (this.debug) {
+      console.log("Page hidden, attempting final batch send.");
+    }
     this.sendQueue();
   }
 
@@ -200,6 +216,7 @@ export class AnalyticsTracker {
 
   /**
    * Send queued events to the backend
+   * @returns {Promise<void>}
    */
   async sendQueue() {
     if (this.eventQueue.length === 0) {
@@ -209,7 +226,7 @@ export class AnalyticsTracker {
     const eventsToSend = [...this.eventQueue];
 
     try {
-      const response = await this.adapter.sendRequest(this.backendUrl, {
+      const response = await this.adapter.sendRequest(this.serverUrl, {
         uid: this.userId,
         sessionId: this.sessionId,
         events: eventsToSend,
@@ -220,12 +237,16 @@ export class AnalyticsTracker {
         // Clear queue on success
         this.eventQueue = [];
       } else {
-        console.error(`Failed to send analytics batch: ${response.status}`);
+        if (this.debug) {
+          console.error(`Failed to send analytics batch: ${response.status}`);
+        }
         // Keep events in queue to retry
         this.eventQueue = [...eventsToSend];
       }
     } catch (err) {
-      console.error("Failed to send analytics batch:", err);
+      if (this.debug) {
+        console.error("Failed to send analytics batch:", err);
+      }
       // Keep events in queue to retry
       this.eventQueue = [...eventsToSend];
     }
@@ -235,7 +256,9 @@ export class AnalyticsTracker {
    * Cleans up listeners and timers
    */
   destroy() {
-    console.log("Destroying tracker...");
+    if (this.debug) {
+      console.log("Destroying tracker...");
+    }
 
     // Stop the batch sender
     if (this.sendTimer) {

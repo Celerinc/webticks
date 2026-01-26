@@ -20,7 +20,7 @@ import inject from '@webticks/core';
 
 // Initialize analytics with explicit config
 inject({
-  backendUrl: 'https://your-api.com/track',
+  serverUrl: 'https://your-api.com/track',
   appId: 'your-app-id'
 });
 ```
@@ -32,13 +32,13 @@ For security and flexibility, it is **highly recommended** to source your config
 ```javascript
 // Example using Vite or other modern bundlers
 inject({
-  backendUrl: import.meta.env.VITE_WEBTICKS_BACKEND_URL,
+  serverUrl: import.meta.env.VITE_WEBTICKS_SERVER_URL,
   appId: import.meta.env.VITE_WEBTICKS_APP_ID
 });
 
 // Example using Node.js / Webpack
 inject({
-  backendUrl: process.env.WEBTICKS_BACKEND_URL,
+  serverUrl: process.env.WEBTICKS_SERVER_URL,
   appId: process.env.WEBTICKS_APP_ID
 });
 ```
@@ -56,11 +56,12 @@ inject({
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `backendUrl` | `string` | Recommended. URL to send analytics data to. Defaults to `/api/track`. |
+| `serverUrl` | `string` | Recommended. URL to send analytics data to. Defaults to `/api/track`. |
 | `appId` | `string` | Required. Your application ID. |
+| `debug` | `boolean` | Optional. Enable console logging for debugging. Defaults to `false`. |
 
 > [!NOTE]
-> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
 ## License
 

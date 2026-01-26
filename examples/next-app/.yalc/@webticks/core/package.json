@@ -1,21 +1,44 @@
 {
   "name": "@webticks/core",
-  "version": "1.0.0",
+  "version": "0.1.1",
+  "description": "Lightweight analytics library for modern web applications with seamless event tracking and page view monitoring",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "injector.js",
   "module": "injector.js",
   "exports": {
     ".": "./injector.js",
     "./inject": "./injector.js",
     "./tracker": "./tracker.js",
-    "./platform-adapters": "./platform-adapters.js"
+    "./adapters": "./adapters.js"
   },
   "files": [
     "tracker.js",
     "injector.js",
-    "platform-adapters.js",
+    "adapters.js",
+    "types.js",
     "README.md"
   ],
-  "license": "ISC",
-  "yalcSig": "3b9fa35a255fc2a56915bc484e488d05"
+  "keywords": [
+    "analytics",
+    "tracking",
+    "web-analytics",
+    "event-tracking",
+    "page-views",
+    "metrics",
+    "telemetry"
+  ],
+  "author": "Celerinc Team",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Celerinc/webticks.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/Celerinc/webticks#readme",
+  "bugs": {
+    "url": "https://github.com/Celerinc/webticks/issues"
+  }
 }

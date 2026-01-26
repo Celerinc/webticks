@@ -19,7 +19,7 @@ npm install @webticks/node
 import { createServerTracker } from '@webticks/node';
 
 const tracker = createServerTracker({
-  backendUrl: 'https://your-api.com/track',
+  serverUrl: 'https://your-api.com/track',
   appId: 'your-app-id'
 });
 
@@ -33,7 +33,7 @@ For security and flexibility, it is **highly recommended** to source your config
 
 ```javascript
 const tracker = createServerTracker({
-  backendUrl: process.env.WEBTICKS_BACKEND_URL,
+  serverUrl: process.env.WEBTICKS_SERVER_URL,
   appId: process.env.WEBTICKS_APP_ID
 });
 ```
@@ -48,7 +48,7 @@ import { createServerTracker } from '@webticks/node';
 
 const app = express();
 const tracker = createServerTracker({
-  backendUrl: process.env.WEBTICKS_BACKEND_URL,
+  serverUrl: process.env.WEBTICKS_SERVER_URL,
   appId: process.env.WEBTICKS_APP_ID
 });
 
@@ -85,11 +85,12 @@ tracker.trackEvent('checkout', { total: 99.99 }, { isAutoTracked: true, req });
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `backendUrl` | `string` | Required. URL to send analytics. |
+| `serverUrl` | `string` | Required. URL to send analytics. |
 | `appId` | `string` | Required. Your application ID. |
+| `debug` | `boolean` | Optional. Enable console logging for debugging. Defaults to `false`. |
 
 > [!NOTE]
-> `appId` and `backendUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
 
 ## License
 

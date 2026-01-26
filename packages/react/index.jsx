@@ -2,10 +2,17 @@
 import inject from '@webticks/core';
 import { useEffect } from 'react';
 
-function WebticksAnalytics({ backendUrl, appId }) {
+/**
+ * WebTicks Analytics Component for React
+ * @param {Object} props
+ * @param {string} props.serverUrl - URL to send analytics data
+ * @param {string} [props.appId] - Application ID for tracking
+ * @param {boolean} [props.debug] - Enable debug logging
+ */
+function WebticksAnalytics({ serverUrl, appId, debug }) {
     useEffect(() => {
-        inject({ backendUrl, appId });
-    }, [backendUrl, appId]);
+        inject({ serverUrl, appId, debug });
+    }, [serverUrl, appId, debug]);
     return null;
 }
 

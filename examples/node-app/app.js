@@ -14,7 +14,7 @@ const PORT = 3001;
 
 // Create tracker instance - sends events to your WebTicks API
 const tracker = createServerTracker({
-    backendUrl: 'http://localhost:3002/api/track', // Your WebTicks API endpoint
+    serverUrl: "http://localhost:3002/api/track", // Your WebTicks API endpoint
     appId: '97069816-8b25-4640-833f-f17259208a42'  // Your application ID
 });
 
