@@ -1,6 +1,6 @@
 {
     "name": "@webticks/nuxt",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Nuxt 3 integration for WebTicks analytics",
     "main": "dist/module.mjs",
     "types": "dist/types.d.ts",

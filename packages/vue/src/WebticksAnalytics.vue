@@ -3,12 +3,13 @@ import { onMounted } from 'vue';
 import inject from '@webticks/core';
 
 const props = defineProps({
-  backendUrl: String,
-  appId: String
+  serverUrl: String,
+  appId: String,
+  debug: Boolean
 });
 
 onMounted(() => {
-  inject({ backendUrl: props.backendUrl, appId: props.appId });
+  inject({ serverUrl: props.serverUrl, appId: props.appId, debug: props.debug });
 });
 </script>
 

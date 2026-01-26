@@ -6,14 +6,19 @@ import inject from '@webticks/core';
     template: '',
     standalone: true
 })
+/**
+ * WebTicks Analytics Component for Angular
+ */
 export class WebticksAnalytics implements OnInit {
-    backendUrl = input<string>();
+    serverUrl = input<string>();
     appId = input<string>();
+    debug = input<boolean>();
 
     ngOnInit() {
         inject({
-            backendUrl: this.backendUrl(),
-            appId: this.appId()
+            serverUrl: this.serverUrl(),
+            appId: this.appId(),
+            debug: this.debug()
         });
     }
 }

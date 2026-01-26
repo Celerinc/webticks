@@ -1,9 +1,17 @@
 {
   "name": "@webticks/react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React integration for WebTicks analytics",
   "main": "index.jsx",
+  "types": "index.d.ts",
   "module": "index.jsx",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.jsx",
+      "require": "./index.jsx"
+    }
+  },
   "type": "module",
   "publishConfig": {
     "access": "public"

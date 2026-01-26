@@ -1,6 +1,6 @@
 {
   "name": "@webticks/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Lightweight analytics library for modern web applications with seamless event tracking and page view monitoring",
   "type": "module",
   "publishConfig": {
@@ -12,12 +12,12 @@
     ".": "./injector.js",
     "./inject": "./injector.js",
     "./tracker": "./tracker.js",
-    "./platform-adapters": "./platform-adapters.js"
+    "./adapters": "./adapters.js"
   },
   "files": [
     "tracker.js",
     "injector.js",
-    "platform-adapters.js",
+    "adapters.js",
     "types.js",
     "README.md"
   ],

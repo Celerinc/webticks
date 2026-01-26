@@ -74,7 +74,7 @@ export class WebticksMiddleware implements NestMiddleware {
 
   constructor() {
     this.tracker = createServerTracker({
-      backendUrl: 'http://localhost:3000/api/track'
+      serverUrl: 'http://localhost:3000/api/track'
     });
   }
 

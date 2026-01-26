@@ -1,6 +1,6 @@
 {
     "name": "@webticks/angular",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Angular integration for WebTicks analytics",
     "main": "dist/public-api.js",
     "types": "dist/public-api.d.ts",
