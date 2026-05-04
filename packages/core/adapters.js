@@ -63,11 +63,11 @@ export class BrowserAdapter {
     }
 
     /**
-     * Get current page URL
-     * @returns {string} Current URL
+     * Get current page pathname (without origin or query string)
+     * @returns {string} Current pathname
      */
     getCurrentPath() {
-        return window.location.href;
+        return window.location.pathname;
     }
 
     /**
@@ -101,9 +101,34 @@ export class BrowserAdapter {
         document.addEventListener('visibilitychange', tracker.handleVisibilityChange);
         window.addEventListener('pagehide', tracker.handlePageHide);
 
-        // Track initial page view
-        tracker.lastPath = window.location.href;
+        // Track initial page view using pathname only
+        tracker.lastPath = window.location.pathname;
         tracker.trackPageView(tracker.lastPath);
+    }
+
+    setUserId(userId) {
+        this.storage.setItem('webticks_uid', userId);
+    }
+
+    clearUserId() {
+        this.storage.removeItem('webticks_uid');
+    }
+
+    persistQueue(events) {
+        try {
+            this.storage.setItem('webticks_queue', JSON.stringify(events));
+        } catch (_) {}
+    }
+
+    loadPersistedQueue() {
+        try {
+            const raw = this.storage.getItem('webticks_queue');
+            return raw ? JSON.parse(raw) : [];
+        } catch (_) { return []; }
+    }
+
+    clearPersistedQueue() {
+        this.storage.removeItem('webticks_queue');
     }
 
     /**

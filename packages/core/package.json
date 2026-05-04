@@ -1,6 +1,6 @@
 {
   "name": "@webticks/core",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Lightweight analytics library for modern web applications with seamless event tracking and page view monitoring",
   "type": "module",
   "publishConfig": {
@@ -8,9 +8,16 @@
   },
   "main": "injector.js",
   "module": "injector.js",
+  "types": "index.d.ts",
   "exports": {
-    ".": "./injector.js",
-    "./inject": "./injector.js",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./injector.js"
+    },
+    "./inject": {
+      "types": "./index.d.ts",
+      "import": "./injector.js"
+    },
     "./tracker": "./tracker.js",
     "./adapters": "./adapters.js"
   },
@@ -19,6 +26,7 @@
     "injector.js",
     "adapters.js",
     "types.js",
+    "index.d.ts",
     "README.md"
   ],
   "keywords": [
