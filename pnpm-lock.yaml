@@ -35,10 +35,10 @@ importers:
   packages/nextjs:
     dependencies:
       '@webticks/core':
-        specifier: ^0.2.0
+        specifier: ^0.1.3
         version: link:../core
       '@webticks/react':
-        specifier: ^0.2.0
+        specifier: ^0.1.3
         version: link:../react
       next:
         specifier: '>=13.0.0'
@@ -50,7 +50,7 @@ importers:
   packages/node:
     dependencies:
       '@webticks/core':
-        specifier: ^0.2.0
+        specifier: ^0.1.3
         version: link:../core
 
   packages/nuxt:
@@ -69,7 +69,7 @@ importers:
   packages/react:
     dependencies:
       '@webticks/core':
-        specifier: ^0.2.0
+        specifier: ^0.1.3
         version: link:../core
       react:
         specifier: '>=16.8.0'
