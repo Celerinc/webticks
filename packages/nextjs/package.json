@@ -1,6 +1,6 @@
 {
   "name": "@webticks/next",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Next.js integration for WebTicks analytics",
   "main": "index.jsx",
   "types": "index.d.ts",
@@ -33,9 +33,11 @@
     "url": "https://github.com/Celerinc/webticks/issues"
   },
   "peerDependencies": {
+    "next": ">=13.0.0",
     "react": ">=16.8.0"
   },
   "dependencies": {
-    "@webticks/react": "^0.1.1"
+    "@webticks/core": "^0.2.0",
+    "@webticks/react": "^0.2.0"
   }
 }
