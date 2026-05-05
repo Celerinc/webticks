@@ -14,7 +14,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.15(@angular/core@19.2.15(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
     devDependencies:
       '@angular/compiler':
@@ -35,10 +35,10 @@ importers:
   packages/nextjs:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
       '@webticks/react':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../react
       next:
         specifier: '>=13.0.0'
@@ -50,14 +50,14 @@ importers:
   packages/node:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
 
   packages/nuxt:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.1
-        version: 0.1.2
+        specifier: ^0.2.0
+        version: link:../core
     devDependencies:
       '@nuxt/kit':
         specifier: ^3.0.0
@@ -69,7 +69,7 @@ importers:
   packages/react:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
       react:
         specifier: '>=16.8.0'
@@ -78,7 +78,7 @@ importers:
   packages/sveltekit:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
       svelte:
         specifier: ^4.0.0 || ^5.0.0
@@ -87,7 +87,7 @@ importers:
   packages/vue:
     dependencies:
       '@webticks/core':
-        specifier: ^0.1.3
+        specifier: ^0.2.0
         version: link:../core
       vue:
         specifier: ^3.0.0
@@ -896,9 +896,6 @@ packages:
 
   '@vue/shared@3.5.24':
     resolution: {integrity: sha512-9cwHL2EsJBdi8NY22pngYYWzkTDhld6fAD6jlaeloNGciNSJL6bLpbxVgXl96X00Jtc6YWQv96YA/0sxex/k1A==}
-
-  '@webticks/core@0.1.2':
-    resolution: {integrity: sha512-6xgkXm9Kw8UQ7iqlVJal8zyhFQ49uRL/kTWE4N//RCe34CfqzsW5z73G9GO6uFn03VYDvwqOGCAU+cECELIT7Q==}
 
   acorn@8.15.0:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
@@ -2591,8 +2588,6 @@ snapshots:
       vue: 3.5.24(typescript@5.9.3)
 
   '@vue/shared@3.5.24': {}
-
-  '@webticks/core@0.1.2': {}
 
   acorn@8.15.0: {}
 
