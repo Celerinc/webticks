@@ -1,46 +1,46 @@
 {
-    "name": "@webticks/nuxt",
-    "version": "0.1.2",
-    "description": "Nuxt 3 integration for WebTicks analytics",
-    "main": "dist/module.mjs",
-    "types": "dist/types.d.ts",
-    "publishConfig": {
-        "access": "public"
-    },
-    "exports": {
-        ".": {
-            "types": "./dist/types.d.ts",
-            "import": "./dist/module.mjs",
-            "require": "./dist/module.cjs"
-        }
-    },
-    "scripts": {
-        "build": "nuxt-module-build"
-    },
-    "keywords": [
-        "analytics",
-        "tracking",
-        "nuxt",
-        "nuxt3",
-        "vue",
-        "webticks"
-    ],
-    "author": "Celerinc Team",
-    "license": "MPL-2.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Celerinc/webticks.git",
-        "directory": "packages/nuxt"
-    },
-    "homepage": "https://github.com/Celerinc/webticks#readme",
-    "bugs": {
-        "url": "https://github.com/Celerinc/webticks/issues"
-    },
-    "dependencies": {
-        "@webticks/core": "^0.1.1"
-    },
-    "devDependencies": {
-        "@nuxt/kit": "^3.0.0",
-        "@nuxt/module-builder": "^0.8.0"
+  "name": "@webticks/nuxt",
+  "version": "0.2.0",
+  "description": "Nuxt 3 integration for WebTicks analytics",
+  "main": "dist/module.mjs",
+  "types": "dist/types.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
     }
+  },
+  "scripts": {
+    "build": "nuxt-module-build"
+  },
+  "keywords": [
+    "analytics",
+    "tracking",
+    "nuxt",
+    "nuxt3",
+    "vue",
+    "webticks"
+  ],
+  "author": "Celerinc Team",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Celerinc/webticks.git",
+    "directory": "packages/nuxt"
+  },
+  "homepage": "https://github.com/Celerinc/webticks#readme",
+  "bugs": {
+    "url": "https://github.com/Celerinc/webticks/issues"
+  },
+  "dependencies": {
+    "@webticks/core": "^0.2.0"
+  },
+  "devDependencies": {
+    "@nuxt/kit": "^3.0.0",
+    "@nuxt/module-builder": "^0.8.0"
+  }
 }
