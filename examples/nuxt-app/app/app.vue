@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { track } from '@webticks/core'
 
 // Timer settings (in seconds)
 const workDuration = ref(25 * 60)
@@ -16,18 +17,16 @@ const showSettings = ref(false)
 let intervalId: NodeJS.Timeout | null = null
 let startTime: number | null = null
 
-// Track event helper
+// Track event helper — uses the typed `track` import from @webticks/core (SSR-safe)
 const trackEvent = (eventName: string, metadata: Record<string, any> = {}) => {
-  if (process.client && window.webticks) {
-    const eventData = {
-      ...metadata,
-      sessionType: sessionType.value,
-      completedPomodoros: completedPomodoros.value,
-      timestamp: new Date().toISOString()
-    }
-    window.webticks.trackEvent(eventName, eventData)
-    console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+  const eventData = {
+    ...metadata,
+    sessionType: sessionType.value,
+    completedPomodoros: completedPomodoros.value,
+    timestamp: new Date().toISOString()
   }
+  track(eventName, eventData)
+  console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
 }
 
 // Timer logic

@@ -12,7 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@webticks/vue": "latest",
+    "@webticks/core": "file:.yalc/@webticks/core",
+    "@webticks/vue": "file:.yalc/@webticks/vue",
     "vue": "^3.5.22"
   },
   "devDependencies": {

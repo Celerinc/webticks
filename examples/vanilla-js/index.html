@@ -378,11 +378,13 @@
 
     <!-- Initialize WebTicks -->
     <script type="module">
-        import { inject } from '../../packages/core/injector.js';
+        import inject, { track } from '../../packages/core/injector.js';
         inject({
-            backendUrl: 'http://localhost:3002/api/track',
+            serverUrl: 'http://localhost:3002/api/track',
             appId: '97069816-8b25-4640-833f-f17259208a42'
         });
+        // Expose `track` to non-module scripts on the page
+        window.wtTrack = track;
         console.log('✅ WebTicks initialized');
     </script>
 
@@ -409,18 +411,16 @@
         const nextBreak = document.getElementById('nextBreak');
         const settingsPanel = document.getElementById('settingsPanel');
 
-        // Track event helper
+        // Track event helper — uses the `track` import bridged via window.wtTrack
         function trackEvent(eventName, metadata = {}) {
-            if (window.webticks) {
-                const eventData = {
-                    ...metadata,
-                    sessionType,
-                    completedPomodoros,
-                    timestamp: new Date().toISOString()
-                };
-                window.webticks.trackEvent(eventName, eventData);
-                console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
-            }
+            const eventData = {
+                ...metadata,
+                sessionType,
+                completedPomodoros,
+                timestamp: new Date().toISOString()
+            };
+            window.wtTrack?.(eventName, eventData);
+            console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
         }
 
         // Format time as MM:SS

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import WebticksAnalytics from '@webticks/react'
+import WebticksAnalytics, { track } from '@webticks/react'
 import './App.css'
 
 function App() {
@@ -18,18 +18,16 @@ function App() {
   const intervalRef = useRef(null)
   const startTimeRef = useRef(null)
 
-  // Track event helper
+  // Track event helper — uses the typed `track` import from @webticks/react
   const trackEvent = (eventName, metadata = {}) => {
-    if (window.webticks) {
-      const eventData = {
-        ...metadata,
-        sessionType,
-        completedPomodoros,
-        timestamp: new Date().toISOString()
-      }
-      window.webticks.trackEvent(eventName, eventData)
-      console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+    const eventData = {
+      ...metadata,
+      sessionType,
+      completedPomodoros,
+      timestamp: new Date().toISOString(),
     }
+    track(eventName, eventData)
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
   }
 
   // Timer logic

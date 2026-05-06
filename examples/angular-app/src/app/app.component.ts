@@ -1,14 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WebticksAnalytics } from '@webticks/angular-ts';
-
-declare global {
-  interface Window {
-    webticks?: {
-      trackEvent: (eventName: string, metadata?: Record<string, any>) => void;
-    };
-  }
-}
+import { WebticksAnalytics, track } from '@webticks/angular';
 
 type SessionType = 'work' | 'shortBreak' | 'longBreak';
 
@@ -40,18 +32,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  // Track event helper
+  // Track event helper — uses the typed `track` import from @webticks/angular
   private trackEvent(eventName: string, metadata: Record<string, any> = {}) {
-    if (window.webticks) {
-      const eventData = {
-        ...metadata,
-        sessionType: this.sessionType,
-        completedPomodoros: this.completedPomodoros,
-        timestamp: new Date().toISOString()
-      };
-      window.webticks.trackEvent(eventName, eventData);
-      console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
-    }
+    const eventData = {
+      ...metadata,
+      sessionType: this.sessionType,
+      completedPomodoros: this.completedPomodoros,
+      timestamp: new Date().toISOString()
+    };
+    track(eventName, eventData);
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
   }
 
   // Timer logic

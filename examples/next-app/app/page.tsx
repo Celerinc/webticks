@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { track } from '@webticks/next'
 
 export default function Home() {
   // Timer settings (in seconds)
@@ -18,18 +19,17 @@ export default function Home() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const startTimeRef = useRef<number | null>(null)
 
-  // Track event helper
-  const trackEvent = (eventName: string, metadata: Record<string, any> = {}) => {
-    if (typeof window !== 'undefined' && (window as any).webticks) {
-      const eventData = {
-        ...metadata,
-        sessionType,
-        completedPomodoros,
-        timestamp: new Date().toISOString()
-      }
-        ; (window as any).webticks.trackEvent(eventName, eventData)
-      console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
+  // Track event helper — now uses the typed `track` import from @webticks/next
+  // (no more window guards, no more `as any` casts)
+  const trackEvent = (eventName: string, metadata: Record<string, unknown> = {}) => {
+    const eventData = {
+      ...metadata,
+      sessionType,
+      completedPomodoros,
+      timestamp: new Date().toISOString(),
     }
+    track(eventName, eventData)
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData)
   }
 
   // Timer logic

@@ -1,6 +1,6 @@
 {
   "name": "@webticks/sveltekit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "SvelteKit integration for WebTicks analytics",
   "type": "module",
   "publishConfig": {

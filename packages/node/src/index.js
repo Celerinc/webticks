@@ -35,6 +35,17 @@ export function createServerTracker(config = {}) {
     // Pass the adapter through config so AnalyticsTracker uses it from the start
     const tracker = new AnalyticsTracker({ ...config, adapter: new NodeAdapter() });
 
+    // Start the batch flush timer (browser version of this is auto-started by autoTrackPageViews)
+    tracker.startBatchTimer();
+
+    // Best-effort flush on graceful shutdown
+    if (typeof process !== 'undefined' && process.on) {
+        const flushOnExit = () => { tracker.sendQueue(); };
+        process.on('beforeExit', flushOnExit);
+        process.on('SIGINT', () => { flushOnExit(); process.exit(0); });
+        process.on('SIGTERM', () => { flushOnExit(); process.exit(0); });
+    }
+
     // Store original trackEvent method
     const originalTrackEvent = tracker.trackEvent.bind(tracker);
 

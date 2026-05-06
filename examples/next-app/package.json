@@ -9,8 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@webticks/core": "latest",
-    "@webticks/react": "latest",
+    "@webticks/core": "file:.yalc/@webticks/core",
+    "@webticks/next": "file:.yalc/@webticks/next",
+    "@webticks/react": "file:.yalc/@webticks/react",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"

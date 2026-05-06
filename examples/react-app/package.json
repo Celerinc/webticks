@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@webticks/react": "latest",
+    "@webticks/core": "file:.yalc/@webticks/core",
+    "@webticks/react": "file:.yalc/@webticks/react",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

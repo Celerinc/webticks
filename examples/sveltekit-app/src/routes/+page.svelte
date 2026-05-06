@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
+  import { track } from '@webticks/sveltekit';
 
   // Timer settings (in seconds)
   let workDuration = 25 * 60;
@@ -17,18 +17,16 @@
   let intervalId: ReturnType<typeof setInterval> | null = null;
   let startTime: number | null = null;
 
-  // Track event helper
+  // Track event helper — uses the typed `track` import from @webticks/sveltekit
   function trackEvent(eventName: string, metadata: Record<string, any> = {}) {
-    if (browser && (window as any).webticks) {
-      const eventData = {
-        ...metadata,
-        sessionType,
-        completedPomodoros,
-        timestamp: new Date().toISOString()
-      };
-      (window as any).webticks.trackEvent(eventName, eventData);
-      console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
-    }
+    const eventData = {
+      ...metadata,
+      sessionType,
+      completedPomodoros,
+      timestamp: new Date().toISOString()
+    };
+    track(eventName, eventData);
+    console.log(`✅ WebTicks tracked: ${eventName}`, eventData);
   }
 
   // Timer logic

@@ -8,7 +8,8 @@
         "start": "node demo-server.js"
     },
     "dependencies": {
-        "@webticks/node": "latest",
+        "@webticks/core": "file:.yalc/@webticks/core",
+        "@webticks/node": "file:.yalc/@webticks/node",
         "express": "^4.18.2"
     }
 }
