@@ -1,15 +1,19 @@
 {
   "name": "@webticks/sveltekit",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "SvelteKit integration for WebTicks analytics",
   "type": "module",
+  "types": "src/index.d.ts",
+  "files": ["src/", "README.md"],
   "publishConfig": {
     "access": "public"
   },
   "svelte": "./src/index.js",
   "exports": {
     ".": {
-      "svelte": "./src/index.js"
+      "types": "./src/index.d.ts",
+      "svelte": "./src/index.js",
+      "import": "./src/index.js"
     }
   },
   "keywords": [

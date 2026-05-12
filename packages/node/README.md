@@ -5,7 +5,9 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@webticks/node)](https://bundlephobia.com/package/@webticks/node)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
 
-Node.js server-side tracking for WebTicks analytics.
+Server-side tracking for WebTicks analytics. Works with Express, NestJS, Fastify, and any Node.js HTTP framework.
+
+---
 
 ## Installation
 
@@ -13,84 +15,165 @@ Node.js server-side tracking for WebTicks analytics.
 npm install @webticks/node
 ```
 
-## Quick Start
+---
 
-```javascript
+## Setup
+
+### Step 1 — Create a tracker instance
+
+```js
+// src/analytics.js (or analytics.ts)
 import { createServerTracker } from '@webticks/node';
 
-const tracker = createServerTracker({
-  serverUrl: 'https://your-api.com/track',
-  appId: 'your-app-id'
-});
-
-// Use middleware for automatic request tracking (recommended)
-app.use(tracker.middleware());
-```
-
-## Best Practices: Environment Variables
-
-For security and flexibility, it is **highly recommended** to source your configuration from environment variables.
-
-```javascript
-const tracker = createServerTracker({
+export const tracker = createServerTracker({
   serverUrl: process.env.WEBTICKS_SERVER_URL,
-  appId: process.env.WEBTICKS_APP_ID
+  appId: process.env.WEBTICKS_APP_ID,
 });
 ```
 
-## Express Middleware Integration
+Add to your `.env`:
 
-The `tracker.middleware()` helper automatically captures request details (method, path, headers) and batches them for efficient delivery to your WebTicks API.
+```bash
+WEBTICKS_SERVER_URL=https://your-api.com/track
+WEBTICKS_APP_ID=your-app-id
+```
 
-```javascript
+### Step 2 — Add auto-tracking middleware (Express)
+
+Mount the middleware once at your app root to automatically track all incoming requests:
+
+```js
 import express from 'express';
-import { createServerTracker } from '@webticks/node';
+import { tracker } from './analytics.js';
 
 const app = express();
-const tracker = createServerTracker({
-  serverUrl: process.env.WEBTICKS_SERVER_URL,
-  appId: process.env.WEBTICKS_APP_ID
-});
 
-// Captures all requests automatically
 app.use(tracker.middleware());
 ```
 
-## Custom Events + Auto-Tracking
+### Step 2 — Add auto-tracking middleware (NestJS)
 
-By default, both your custom event AND the server_request are tracked. This gives you complete analytics:
+In a NestJS app, apply it as a global middleware:
 
-```javascript
+```ts
+// main.ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { tracker } from './analytics';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.use(tracker.middleware());
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+### Step 3 — Track custom events
+
+```js
+import { tracker } from './analytics.js';
+
 app.post('/api/checkout', (req, res) => {
-  tracker.trackEvent('checkout_completed', { total: 99.99 });
-  // Both 'checkout_completed' AND 'server_request' are recorded
+  tracker.trackEvent('checkout_completed', {
+    total: 99.99,
+    currency: 'USD',
+    plan: 'pro',
+  });
   res.json({ success: true });
 });
 ```
 
-### Controlling Auto-Tracking
+By default, both your custom event **and** the automatic `server_request` event are recorded.
 
-By default, both your custom event AND the server_request are tracked.
+---
 
-To skip auto-tracking (only record your custom event), use `isAutoTracked: true`:
+## Common Patterns
 
-```javascript
-// Only custom event (auto-tracking skipped)
-tracker.trackEvent('checkout', { total: 99.99 }, { isAutoTracked: true, req });
+```js
+import { tracker } from './analytics.js';
+
+// Auth
+tracker.trackEvent('login_success', { method: 'magic_link', userId: 'user-123' });
+tracker.trackEvent('login_failed', { reason: 'invalid_token' });
+
+// Business events
+tracker.trackEvent('subscription_created', { plan: 'pro', userId: 'user-123' });
+tracker.trackEvent('subscription_cancelled', { reason: 'too_expensive' });
+
+// Errors
+tracker.trackEvent('error_occurred', { code: 500, path: req.url, message: err.message });
 ```
 
-## API
+---
+
+## Controlling Auto-Tracking
+
+When you call `trackEvent()` in a route, the middleware also records a `server_request` event for the same request — you get both.
+
+To **skip** the auto-tracked `server_request` (record only your custom event), pass `{ isAutoTracked: true, req }`:
+
+```js
+app.post('/api/checkout', (req, res) => {
+  // Only 'checkout_completed' is recorded — no duplicate server_request
+  tracker.trackEvent('checkout_completed', { total: 99.99 }, { isAutoTracked: true, req });
+  res.json({ success: true });
+});
+```
+
+---
+
+## Debug Mode
+
+```js
+const tracker = createServerTracker({
+  serverUrl: process.env.WEBTICKS_SERVER_URL,
+  appId: process.env.WEBTICKS_APP_ID,
+  debug: process.env.NODE_ENV === 'development',
+});
+```
+
+All tracked events will be logged to the console in debug mode.
+
+---
+
+## API Reference
 
 ### `createServerTracker(config)`
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `serverUrl` | `string` | Required. URL to send analytics. |
-| `appId` | `string` | Required. Your application ID. |
-| `debug` | `boolean` | Optional. Enable console logging for debugging. Defaults to `false`. |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `serverUrl` | `string` | — | URL of your webticks-api endpoint |
+| `appId` | `string` | — | Your application ID |
+| `debug` | `boolean` | `false` | Log all events to the console |
+| `flushInterval` | `number` | `10000` | How often to batch-send events (ms) |
+| `maxQueueSize` | `number` | `500` | Max events held in memory before oldest are dropped |
+
+### `tracker.middleware()`
+
+Returns an Express/Connect-compatible middleware function. Mount once at app root. Automatically tracks all requests as `server_request` events on response finish.
+
+### `tracker.trackEvent(name, data?, options?)`
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `name` | `string` | Event name (e.g. `'checkout_completed'`) |
+| `data` | `object` | Arbitrary payload |
+| `options.isAutoTracked` | `boolean` | Set to `true` to skip auto-tracking for this request |
+| `options.req` | `object` | Express request object (required when using `isAutoTracked`) |
+
+### `tracker.sendQueue()`
+
+Manually flush all queued events. Called automatically on `SIGINT` and `SIGTERM`.
+
+### `tracker.destroy()`
+
+Stop the batch timer and clean up. Call on graceful shutdown if needed.
+
+---
 
 > [!NOTE]
-> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `serverUrl` and `appId` are provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) — a self-hosted NestJS + MongoDB backend you can run yourself.
 
 ## License
 

@@ -1,6 +1,7 @@
 {
   "name": "@webticks/react",
-  "version": "0.2.1",
+  "version": "0.2.2",
+  "files": ["index.jsx", "index.d.ts", "README.md"],
   "description": "React integration for WebTicks analytics",
   "main": "index.jsx",
   "types": "index.d.ts",

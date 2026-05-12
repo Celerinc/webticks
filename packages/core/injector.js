@@ -24,16 +24,36 @@ export default function inject(config = {}) {
   }
 
   window.webticks = tracker;
+
+  if (config.debug) {
+    console.log('[webticks] initialized', {
+      serverUrl: config.serverUrl || '/api/track',
+      appId: config.appId,
+      debug: true,
+    });
+  }
 }
 
 /**
  * Track a custom event. No-ops if tracker isn't initialized or in SSR.
  * @param {string} name
- * @param {Record<string, unknown>} [details]
+ * @param {string | Record<string, unknown>} [typeOrDetails] - Event type/category string, or details object if no type needed
+ * @param {Record<string, unknown>} [details] - Event details (only when typeOrDetails is a string)
  */
-export function track(name, details = {}) {
-  if (typeof window === 'undefined' || !window.webticks) return;
-  window.webticks.trackEvent(name, details);
+export function track(name, typeOrDetails = '', details = {}) {
+  if (typeof typeOrDetails === 'object') {
+    details = typeOrDetails;
+    typeOrDetails = '';
+  }
+  if (typeof window === 'undefined') return;
+  if (!window.webticks) {
+    console.warn('[webticks] track() called before inject(). Event dropped:', name);
+    return;
+  }
+  if (window.webticks.debug) {
+    console.log('[webticks] track', name, ...(typeOrDetails ? [typeOrDetails] : []), details);
+  }
+  window.webticks.trackEvent(name, typeOrDetails, details);
 }
 
 /**
@@ -42,7 +62,14 @@ export function track(name, details = {}) {
  * @param {Record<string, unknown>} [traits]
  */
 export function identify(userId, traits = {}) {
-  if (typeof window === 'undefined' || !window.webticks) return;
+  if (typeof window === 'undefined') return;
+  if (!window.webticks) {
+    console.warn('[webticks] identify() called before inject(). Skipped.');
+    return;
+  }
+  if (window.webticks.debug) {
+    console.log('[webticks] identify', userId, traits);
+  }
   window.webticks.identify(userId, traits);
 }
 
@@ -50,6 +77,13 @@ export function identify(userId, traits = {}) {
  * Reset to an anonymous user and start a new session.
  */
 export function reset() {
-  if (typeof window === 'undefined' || !window.webticks) return;
+  if (typeof window === 'undefined') return;
+  if (!window.webticks) {
+    console.warn('[webticks] reset() called before inject(). Skipped.');
+    return;
+  }
+  if (window.webticks.debug) {
+    console.log('[webticks] reset');
+  }
   window.webticks.reset();
 }

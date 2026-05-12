@@ -1,0 +1,9 @@
+{
+  "name": "@webticks/nuxt",
+  "configKey": "webticks",
+  "version": "0.2.0",
+  "builder": {
+    "@nuxt/module-builder": "0.8.4",
+    "unbuild": "unknown"
+  }
+}

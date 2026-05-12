@@ -126,3 +126,9 @@ scripts/
 
 # Agent configuration
 .agent/
+# Allow hand-written type declaration files in packages (not generated)
+!packages/*/index.d.ts
+!packages/*/src/index.d.ts
+!packages/nuxt/dist/types.d.ts
+!packages/nuxt/dist/types.d.mts
+!packages/nuxt/dist/

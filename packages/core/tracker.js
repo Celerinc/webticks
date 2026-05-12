@@ -124,11 +124,12 @@ export class AnalyticsTracker {
     return event;
   }
 
-  trackEvent(eventName, details = {}) {
+  trackEvent(eventName, type = "", details = {}) {
     this._enforceQueueLimit();
     const event = {
       requestId: crypto.randomUUID ? crypto.randomUUID() : this.generateFallbackId(),
       type: 'custom',
+      customType: type,
       name: eventName,
       details,
       path: isBrowser() ? window.location.pathname : null,

@@ -7,60 +7,156 @@
 
 React integration for WebTicks analytics.
 
+> **Using Next.js?** Use [`@webticks/next`](https://www.npmjs.com/package/@webticks/next) instead — it handles App Router navigation tracking automatically.
+
+---
+
 ## Installation
 
 ```bash
 npm install @webticks/react
 ```
 
-## Quick Start
+---
 
-Add the component to your app's root with explicit configuration:
+## Setup
+
+### Step 1 — Add the component to your app root
 
 ```jsx
+// src/main.jsx or App.jsx
 import WebticksAnalytics from '@webticks/react';
 
 function App() {
   return (
     <>
-      <WebticksAnalytics 
-        serverUrl="https://your-api.com/track" 
-        appId="your-app-id" 
+      <WebticksAnalytics
+        serverUrl={import.meta.env.VITE_WEBTICKS_SERVER_URL}
+        appId={import.meta.env.VITE_WEBTICKS_APP_ID}
       />
-      {/* Your app */}
+      {/* rest of your app */}
     </>
   );
 }
 ```
 
-## Best Practices: Environment Variables
+Add to your `.env`:
+```bash
+VITE_WEBTICKS_SERVER_URL=https://your-api.com/track
+VITE_WEBTICKS_APP_ID=your-app-id
+```
 
-For security and flexibility, it is **highly recommended** to source your configuration from environment variables rather than hardcoding them in your source code.
+### Step 2 — Track events anywhere
+
+Import `track` directly — no hook, no context, no wrapper needed:
 
 ```jsx
-// Example using Vite
-<WebticksAnalytics 
-  serverUrl={import.meta.env.VITE_WEBTICKS_SERVER_URL} 
-  appId={import.meta.env.VITE_WEBTICKS_APP_ID} 
-/>
+import { track } from '@webticks/react';
 
-// Example using Create React App
-<WebticksAnalytics 
-  serverUrl={process.env.REACT_APP_WEBTICKS_SERVER_URL} 
-  appId={process.env.REACT_APP_WEBTICKS_APP_ID} 
+function SignupButton() {
+  return (
+    <button onClick={() => track('button_clicked', { label: 'Sign Up' })}>
+      Sign Up
+    </button>
+  );
+}
+```
+
+### Step 3 — Identify users and handle sessions
+
+```js
+import { identify, reset } from '@webticks/react';
+
+// After login
+identify('user-123', { plan: 'pro' });
+
+// After logout
+reset();
+```
+
+---
+
+## Common Patterns
+
+```js
+import { track, identify, reset } from '@webticks/react';
+
+// Auth
+track('login_success', 'auth', { method: 'google' });
+identify('user-123', { role: 'admin' });
+
+// Forms
+track('form_submitted', { form: 'signup', step: 1 });
+track('form_error', { form: 'signup', field: 'email' });
+
+// Navigation
+track('tab_changed', { from: 'overview', to: 'settings' });
+
+// Logout
+track('logout', 'auth');
+reset();
+```
+
+---
+
+## TypeScript
+
+### Typed event details
+
+```tsx
+import { track } from '@webticks/react';
+
+track<{ label: string; location: string }>('button_clicked', {
+  label: 'Upgrade',
+  location: 'navbar',
+});
+```
+
+### Typed event categories (autocomplete)
+
+Create a `webticks.d.ts` file in your project:
+
+```ts
+// webticks.d.ts
+declare module '@webticks/core' {
+  interface WebticksEventTypeMap {
+    auth: true;
+    commerce: true;
+    ui: true;
+  }
+}
+
+export {};
+```
+
+The second argument of `track()` will now autocomplete your categories.
+
+---
+
+## Debug Mode
+
+```jsx
+<WebticksAnalytics
+  serverUrl={import.meta.env.VITE_WEBTICKS_SERVER_URL}
+  appId={import.meta.env.VITE_WEBTICKS_APP_ID}
+  debug={import.meta.env.DEV}
 />
 ```
 
+All events will be logged to the browser console in debug mode.
+
+---
+
 ## Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `serverUrl` | `string` | Recommended. URL to send analytics. Defaults to `/api/track`. |
-| `appId` | `string` | Required. Your application ID. |
-| `debug` | `boolean` | Optional. Enable console logging. Defaults to `false`. |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `serverUrl` | `string` | `/api/track` | URL of your webticks-api endpoint |
+| `appId` | `string` | — | Your application ID |
+| `debug` | `boolean` | `false` | Log all events to the console |
 
 > [!NOTE]
-> `appId` and `serverUrl` are typically provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) project, which you can self-host. Alternatively, you can use any backend that implements the WebTicks ingestion API.
+> `serverUrl` and `appId` are provided by the [webticks-api](https://github.com/Celerinc/webticks-api.git) — a self-hosted NestJS + MongoDB backend you can run yourself.
 
 ## License
 
