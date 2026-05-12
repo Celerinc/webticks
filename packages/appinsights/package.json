@@ -1,47 +1,45 @@
 {
-  "name": "@webticks/react",
-  "version": "0.3.0",
-  "files": [
-    "index.jsx",
-    "index.d.ts",
-    "README.md"
-  ],
-  "description": "React integration for WebTicks analytics",
-  "main": "index.jsx",
+  "name": "@webticks/appinsights",
+  "version": "0.1.0",
+  "description": "Azure Application Insights destination for WebTicks analytics",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
   "types": "index.d.ts",
-  "module": "index.jsx",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.jsx",
-      "require": "./index.jsx"
+      "import": "./index.js"
     }
   },
-  "type": "module",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
     "analytics",
-    "tracking",
-    "react",
-    "webticks"
+    "azure",
+    "application-insights",
+    "appinsights",
+    "webticks",
+    "destination"
   ],
   "author": "Celerinc Team",
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Celerinc/webticks.git",
-    "directory": "packages/react"
+    "directory": "packages/appinsights"
   },
   "homepage": "https://github.com/Celerinc/webticks#readme",
   "bugs": {
     "url": "https://github.com/Celerinc/webticks/issues"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
-  },
-  "dependencies": {
-    "@webticks/core": "^0.2.0"
+    "@webticks/core": ">=0.3.0"
   }
 }

@@ -1,6 +1,31 @@
 import { AnalyticsTracker } from "./tracker.js";
 
 /**
+ * First-party destination that sends batches to your webticks-api endpoint.
+ * Automatically used when you pass serverUrl/appId props.
+ * Can also be used explicitly in a destinations[] array.
+ */
+export class WebticksApiDestination {
+  name = 'webticks-api';
+
+  constructor({ serverUrl = '/api/track', appId } = {}) {
+    this.serverUrl = serverUrl;
+    this.appId = appId;
+  }
+
+  async send(batch) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (this.appId) headers['webticks-app-id'] = this.appId;
+    const res = await fetch(this.serverUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(batch),
+    });
+    if (!res.ok) throw new Error(`webticks-api responded ${res.status}`);
+  }
+}
+
+/**
  * Initialize WebTicks and attach it to window.webticks.
  * Safe to call in SSR — no-ops outside the browser.
  * @param {Object} [config]
@@ -10,6 +35,7 @@ import { AnalyticsTracker } from "./tracker.js";
  * @param {number} [config.flushInterval] - Batch send interval in ms (default 10000)
  * @param {number} [config.maxQueueSize] - Max events in memory queue (default 500)
  * @param {boolean} [config.autoTrackPageViews=true] - Set false to handle page views yourself (e.g. @webticks/next)
+ * @param {Array} [config.destinations] - Destination plugins to fan out to
  */
 export default function inject(config = {}) {
   if (typeof window === 'undefined') return;
@@ -26,9 +52,11 @@ export default function inject(config = {}) {
   window.webticks = tracker;
 
   if (config.debug) {
+    const destNames = config.destinations?.map(d => d.name).join(', ');
     console.log('[webticks] initialized', {
-      serverUrl: config.serverUrl || '/api/track',
-      appId: config.appId,
+      ...(config.destinations
+        ? { destinations: destNames }
+        : { serverUrl: config.serverUrl || '/api/track', appId: config.appId }),
       debug: true,
     });
   }

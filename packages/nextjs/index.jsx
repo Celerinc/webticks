@@ -11,18 +11,20 @@ export { track, identify, reset } from '@webticks/react';
  *
  * @param {Object} props
  * @param {string} [props.serverUrl]
- * @param {string} props.appId
+ * @param {string} [props.appId]
  * @param {boolean} [props.debug]
+ * @param {Array} [props.destinations] - Destination plugins (overrides serverUrl/appId)
  * @param {string[]} [props.stripLocales] - Locale prefixes to strip from tracked paths e.g. ['fr', 'en']
  */
-function WebticksAnalytics({ serverUrl, appId, debug, stripLocales = [] }) {
+function WebticksAnalytics({ serverUrl, appId, debug, destinations, stripLocales = [] }) {
     const pathname = usePathname();
     const prevPathname = useRef(null);
 
     // Initialize once — disable core's History patching since we own page view tracking
     useEffect(() => {
-        inject({ serverUrl, appId, debug, autoTrackPageViews: false });
-    }, [serverUrl, appId, debug]);
+        inject({ serverUrl, appId, debug, destinations, autoTrackPageViews: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Track page view on every pathname change (including initial mount)
     useEffect(() => {

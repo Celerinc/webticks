@@ -6,6 +6,8 @@ export class AnalyticsTracker {
     this.serverUrl = config.serverUrl || "/api/track";
     this.appId = config.appId || null;
     this.debug = config.debug || false;
+    // destinations[]: if provided, sendQueue() fans out to each instead of the legacy HTTP path
+    this.destinations = config.destinations || null;
     this.eventQueue = [];
     this.lastPath = "";
     this.batchSendInterval = config.flushInterval || 10000;
@@ -177,23 +179,43 @@ export class AnalyticsTracker {
     if (this.eventQueue.length === 0) return;
 
     const eventsToSend = [...this.eventQueue];
+    const batch = {
+      uid: this.userId,
+      sessionId: this.sessionId,
+      events: eventsToSend,
+      datetime: new Date().toISOString(),
+    };
+
+    const clearQueue = () => {
+      this.eventQueue = [];
+      if (this.adapter && this.adapter.clearPersistedQueue) {
+        this.adapter.clearPersistedQueue();
+      }
+    };
 
     try {
-      const response = await this.adapter.sendRequest(this.serverUrl, {
-        uid: this.userId,
-        sessionId: this.sessionId,
-        events: eventsToSend,
-        datetime: new Date().toISOString()
-      }, this.appId);
-
-      if (response.ok) {
-        this.eventQueue = [];
-        if (this.adapter && this.adapter.clearPersistedQueue) {
-          this.adapter.clearPersistedQueue();
-        }
+      if (this.destinations && this.destinations.length > 0) {
+        // Fan-out to all destinations in parallel — per-destination errors never crash others
+        const results = await Promise.allSettled(
+          this.destinations.map(d => d.send(batch))
+        );
+        results.forEach((r, i) => {
+          if (r.status === 'rejected') {
+            console.warn(`[webticks] destination "${this.destinations[i].name}" failed:`, r.reason);
+          }
+        });
+        const anyOk = results.some(r => r.status === 'fulfilled');
+        if (anyOk) clearQueue();
+        else this.eventQueue = [...eventsToSend];
       } else {
-        if (this.debug) console.error(`Failed to send analytics batch: ${response.status}`);
-        this.eventQueue = [...eventsToSend];
+        // Legacy path: single HTTP POST to serverUrl
+        const response = await this.adapter.sendRequest(this.serverUrl, batch, this.appId);
+        if (response.ok) {
+          clearQueue();
+        } else {
+          if (this.debug) console.error(`Failed to send analytics batch: ${response.status}`);
+          this.eventQueue = [...eventsToSend];
+        }
       }
     } catch (err) {
       if (this.debug) console.error("Failed to send analytics batch:", err);

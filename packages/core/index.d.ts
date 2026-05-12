@@ -22,6 +22,53 @@ export type WebticksEventType =
   | keyof WebticksEventTypeMap
   | (string & {});
 
+/** A single tracked event inside a batch. */
+export interface WebticksEvent {
+  requestId: string;
+  type: 'pageview' | 'custom' | 'server_request';
+  name?: string;
+  customType?: string;
+  path?: string | null;
+  timestamp: string;
+  details?: Record<string, unknown>;
+  method?: string;
+}
+
+/** The batch payload passed to every destination's send() method. */
+export interface WebTicksBatch {
+  uid: string | null;
+  sessionId: string;
+  datetime: string;
+  events: WebticksEvent[];
+}
+
+/**
+ * Implement this interface to send webticks batches to any analytics backend.
+ *
+ * @example
+ * import { AppInsightsDestination } from '@webticks/appinsights';
+ *
+ * <WebticksAnalytics
+ *   destinations={[new AppInsightsDestination({ connectionString: '...' })]}
+ * />
+ */
+export interface WebticksDestination {
+  /** Human-readable name shown in debug logs and error messages. */
+  name: string;
+  /** Called with every flushed batch. Throw to signal failure. */
+  send(batch: WebTicksBatch): Promise<void>;
+}
+
+/**
+ * Built-in destination that POSTs batches to your webticks-api endpoint.
+ * Used automatically when you pass serverUrl/appId props.
+ */
+export declare class WebticksApiDestination implements WebticksDestination {
+  name: 'webticks-api';
+  constructor(options?: { serverUrl?: string; appId?: string });
+  send(batch: WebTicksBatch): Promise<void>;
+}
+
 export interface WebticksOptions {
   serverUrl?: string;
   appId?: string;
@@ -36,6 +83,11 @@ export interface WebticksOptions {
    * Default: true
    */
   autoTrackPageViews?: boolean;
+  /**
+   * Destination plugins to fan-out events to.
+   * When provided, serverUrl/appId are ignored unless you include WebticksApiDestination explicitly.
+   */
+  destinations?: WebticksDestination[];
 }
 
 export interface WebticksTracker {
