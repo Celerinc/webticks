@@ -146,8 +146,8 @@ Each webticks event is converted to an [App Insights telemetry envelope](https:/
   "time": "2026-05-12T14:00:00.000Z",
   "iKey": "<iKey>",
   "tags": {
-    "ai.user.id": "<uid>",
-    "ai.session.id": "<sessionId>"
+    "appInsights.userId": "<uid>",
+    "appInsights.sessionId": "<sessionId>"
   },
   "data": {
     "baseType": "EventData",
@@ -174,7 +174,7 @@ All envelopes from the flush are sent as a single JSON array in one `POST` reque
 
 ### 4. User and session tracking
 
-The `ai.user.id` and `ai.session.id` tags are set from webticks' own `uid` (persisted in `localStorage`) and `sessionId` (reset on `reset()`). This means App Insights **Users**, **Sessions**, and **Retention** reports work out of the box without any extra configuration.
+The `appInsights.userId` and `appInsights.sessionId` tags are set from webticks' own `uid` (persisted in `localStorage`) and `sessionId` (reset on `reset()`). This means App Insights **Users**, **Sessions**, and **Retention** reports work out of the box without any extra configuration.
 
 ---
 

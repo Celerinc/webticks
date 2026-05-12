@@ -78,8 +78,8 @@ export class AppInsightsDestination {
       time: event.timestamp,
       iKey: this.iKey,
       tags: {
-        'ai.user.id': uid || 'anonymous',
-        'ai.session.id': sessionId,
+        'appInsights.userId': uid || 'anonymous',
+        'appInsights.sessionId': sessionId,
       },
       data: {
         baseType: isPageView ? 'PageViewData' : 'EventData',
