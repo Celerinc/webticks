@@ -6,8 +6,9 @@ export class AnalyticsTracker {
     this.serverUrl = config.serverUrl || "/api/track";
     this.appId = config.appId || null;
     this.debug = config.debug || false;
-    // destinations[]: if provided, sendQueue() fans out to each instead of the legacy HTTP path
-    this.destinations = config.destinations || null;
+    // Normalize: single destination → [dest], array → as-is, undefined → null (legacy path)
+    const d = config.destinations;
+    this.destinations = d ? (Array.isArray(d) ? d : [d]) : null;
     this.eventQueue = [];
     this.lastPath = "";
     this.batchSendInterval = config.flushInterval || 10000;

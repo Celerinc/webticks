@@ -45,17 +45,22 @@ export interface WebTicksBatch {
 /**
  * Implement this interface to send webticks batches to any analytics backend.
  *
- * @example
- * import { AppInsightsDestination } from '@webticks/appinsights';
+ * Pass a **single destination** to route all events exclusively to it:
+ * ```tsx
+ * <WebticksAnalytics destinations={new AppInsightsDestination({ connectionString: '...' })} />
+ * ```
  *
- * <WebticksAnalytics
- *   destinations={[new AppInsightsDestination({ connectionString: '...' })]}
- * />
+ * Pass an **array** to fan-out to multiple destinations in parallel:
+ * ```tsx
+ * <WebticksAnalytics destinations={[appInsightsDest, webticksApiDest]} />
+ * ```
+ *
+ * Each destination receives the same batch. One destination failing never blocks the others.
  */
 export interface WebticksDestination {
   /** Human-readable name shown in debug logs and error messages. */
   name: string;
-  /** Called with every flushed batch. Throw to signal failure. */
+  /** Called with every flushed batch. Throw to signal failure (logged as a warning). */
   send(batch: WebTicksBatch): Promise<void>;
 }
 
@@ -84,10 +89,22 @@ export interface WebticksOptions {
    */
   autoTrackPageViews?: boolean;
   /**
-   * Destination plugins to fan-out events to.
-   * When provided, serverUrl/appId are ignored unless you include WebticksApiDestination explicitly.
+   * Where to send events.
+   *
+   * - **Single destination**: all events go exclusively to that one destination.
+   *   ```ts
+   *   inject({ destinations: new AppInsightsDestination({ connectionString: '...' }) })
+   *   ```
+   * - **Array of destinations**: events are fanned out to all in parallel.
+   *   One failing never blocks the others.
+   *   ```ts
+   *   inject({ destinations: [appInsightsDest, webticksApiDest] })
+   *   ```
+   *
+   * When `destinations` is set, `serverUrl`/`appId` are ignored unless you
+   * explicitly include `WebticksApiDestination` in the array.
    */
-  destinations?: WebticksDestination[];
+  destinations?: WebticksDestination | WebticksDestination[];
 }
 
 export interface WebticksTracker {

@@ -29,24 +29,26 @@ InstrumentationKey=abc123...;IngestionEndpoint=https://westeurope-5.in.applicati
 
 ### Step 2 — Add to your app
 
-#### Next.js
+The `destinations` prop accepts **a single destination** (exclusive) or **an array** (fan-out).
+
+#### App Insights only (exclusive)
+
+Pass a single instance — all events go only to App Insights:
 
 ```tsx
 // app/layout.tsx
 import WebticksAnalytics from '@webticks/next';
 import { AppInsightsDestination } from '@webticks/appinsights';
 
-const destinations = [
-  new AppInsightsDestination({
-    connectionString: process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING!,
-  }),
-];
-
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <WebticksAnalytics destinations={destinations} />
+        <WebticksAnalytics
+          destinations={new AppInsightsDestination({
+            connectionString: process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING!,
+          })}
+        />
         {children}
       </body>
     </html>
@@ -59,53 +61,58 @@ Add to your `.env.local`:
 NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
 ```
 
-#### React (Vite)
+#### App Insights + webticks-api (fan-out)
+
+Pass an array — events are sent to all destinations in parallel.
+One failing never blocks the others:
+
+```tsx
+import WebticksAnalytics from '@webticks/next';
+import { WebticksApiDestination } from '@webticks/core';
+import { AppInsightsDestination } from '@webticks/appinsights';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <WebticksAnalytics
+          destinations={[
+            new WebticksApiDestination({
+              serverUrl: process.env.NEXT_PUBLIC_WEBTICKS_SERVER_URL,
+              appId: process.env.NEXT_PUBLIC_WEBTICKS_APP_ID,
+            }),
+            new AppInsightsDestination({
+              connectionString: process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING!,
+            }),
+          ]}
+        />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+#### React (Vite) — exclusive
 
 ```jsx
 // src/App.jsx
 import WebticksAnalytics from '@webticks/react';
 import { AppInsightsDestination } from '@webticks/appinsights';
 
-const destinations = [
-  new AppInsightsDestination({
-    connectionString: import.meta.env.VITE_APPINSIGHTS_CONNECTION_STRING,
-  }),
-];
-
 function App() {
   return (
     <>
-      <WebticksAnalytics destinations={destinations} />
+      <WebticksAnalytics
+        destinations={new AppInsightsDestination({
+          connectionString: import.meta.env.VITE_APPINSIGHTS_CONNECTION_STRING,
+        })}
+      />
       {/* rest of app */}
     </>
   );
 }
 ```
-
----
-
-## Sending to multiple destinations
-
-You can combine App Insights with your webticks-api in the same `destinations` array:
-
-```tsx
-import { AppInsightsDestination } from '@webticks/appinsights';
-import { WebticksApiDestination } from '@webticks/core';
-
-const destinations = [
-  new WebticksApiDestination({
-    serverUrl: process.env.NEXT_PUBLIC_WEBTICKS_SERVER_URL,
-    appId: process.env.NEXT_PUBLIC_WEBTICKS_APP_ID,
-  }),
-  new AppInsightsDestination({
-    connectionString: process.env.NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING!,
-  }),
-];
-
-<WebticksAnalytics destinations={destinations} />
-```
-
-Events are fanned out to all destinations in parallel. One destination failing never blocks the others.
 
 ---
 
