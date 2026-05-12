@@ -120,6 +120,64 @@ function App() {
 
 ---
 
+## How it works
+
+WebTicks batches events in memory and flushes them every 10 seconds (configurable). When a flush happens, `AppInsightsDestination.send()` is called with the full batch.
+
+### 1. Connection string parsing
+
+The constructor parses your connection string to extract two values:
+
+```
+InstrumentationKey=abc123;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/
+                   ^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   iKey                     base URL for the ingestion endpoint
+```
+
+The ingestion URL becomes `IngestionEndpoint + /v2/track`. If no `IngestionEndpoint` is present, it falls back to `https://dc.services.visualstudio.com/v2/track`.
+
+### 2. Event mapping
+
+Each webticks event is converted to an [App Insights telemetry envelope](https://github.com/microsoft/ApplicationInsights-dotnet/blob/main/BASE/Schema/PublicSchema/Envelope.bond) — the same JSON format the official SDK uses:
+
+```json
+{
+  "name": "Microsoft.ApplicationInsights.<iKey>.Event",
+  "time": "2026-05-12T14:00:00.000Z",
+  "iKey": "<iKey>",
+  "tags": {
+    "ai.user.id": "<uid>",
+    "ai.session.id": "<sessionId>"
+  },
+  "data": {
+    "baseType": "EventData",
+    "baseData": {
+      "ver": 2,
+      "name": "login_success",
+      "properties": {
+        "uid": "user-123",
+        "sessionId": "...",
+        "path": "/fr/auth/callback",
+        "eventType": "auth",
+        "role": "expert"
+      }
+    }
+  }
+}
+```
+
+Page view events use `baseType: "PageViewData"` instead and include a `url` field — App Insights treats them as page views in the **Page Views** blade rather than custom events.
+
+### 3. Batch POST
+
+All envelopes from the flush are sent as a single JSON array in one `POST` request to the ingestion endpoint. App Insights accepts up to 100 items per request. If the response is not `2xx`, an error is thrown — webticks logs it as a warning and retries on the next flush.
+
+### 4. User and session tracking
+
+The `ai.user.id` and `ai.session.id` tags are set from webticks' own `uid` (persisted in `localStorage`) and `sessionId` (reset on `reset()`). This means App Insights **Users**, **Sessions**, and **Retention** reports work out of the box without any extra configuration.
+
+---
+
 ## What gets sent
 
 | Webticks event type | App Insights telemetry | `baseType` |
