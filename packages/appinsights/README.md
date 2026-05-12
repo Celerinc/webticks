@@ -4,7 +4,9 @@
 [![license](https://img.shields.io/npm/l/@webticks/appinsights.svg)](https://github.com/Celerinc/webticks/blob/main/LICENSE)
 ![Azure](https://img.shields.io/badge/Azure-Application_Insights-0078D4?logo=microsoftazure&logoColor=white)
 
-Azure Application Insights destination for WebTicks analytics. No SDK dependency — uses raw `fetch`.
+Azure Application Insights destination for WebTicks analytics.
+
+**No Azure SDK required.** This package uses raw `fetch` to talk directly to the App Insights ingestion endpoint. Installing `@webticks/appinsights` is all you need — `@microsoft/applicationinsights-web` is not installed, not bundled, and not needed.
 
 ---
 
@@ -13,6 +15,8 @@ Azure Application Insights destination for WebTicks analytics. No SDK dependency
 ```bash
 npm install @webticks/appinsights
 ```
+
+No other packages needed. Zero additional dependencies.
 
 ---
 
